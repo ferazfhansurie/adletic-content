@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "neon-postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@neondatabase/mcp-server-neon",
+        "start",
+        "--connectionString",
+        "postgresql://neondb_owner:npg_Y43yGsVocuWi@ep-curly-boat-a1wfjnpy-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+      ]
+    }
+  }
+}
