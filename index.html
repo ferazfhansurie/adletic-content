@@ -181,6 +181,25 @@
   .model-info strong { font-size: 0.78rem; font-weight: 700; color: #fff; display: block; }
   .model-info p { font-size: 0.68rem; color: rgba(255,255,255,0.5); margin: 0; }
 
+  /* ── Inline Edit ── */
+  .editable-block { position: relative; }
+  .edit-btn { position: absolute; top: 8px; right: 8px; background: var(--white); border: 1px solid var(--border-light); border-radius: 8px; padding: 4px 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); cursor: pointer; transition: all 0.2s; opacity: 0; z-index: 5; font-family: 'Inter', sans-serif; }
+  .editable-block:hover .edit-btn { opacity: 1; }
+  .edit-btn:hover { color: var(--accent); border-color: var(--accent); background: rgba(242,101,34,0.04); }
+  .edit-btn.saving { color: var(--section-cta); border-color: var(--section-cta); }
+  .editing-block .edit-btn { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); }
+  .editing-block:hover .edit-btn { opacity: 1; }
+  .editing-block .edit-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .inline-editor { width: 100%; min-height: 80px; padding: 12px; border: 2px solid var(--accent); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.82rem; line-height: 1.75; color: var(--text-primary); background: var(--white); resize: vertical; outline: none; }
+  .inline-editor.dark { background: #0d1117; color: rgba(255,255,255,0.85); border-color: var(--accent); }
+  .edit-actions { display: flex; gap: 6px; margin-top: 8px; justify-content: flex-end; }
+  .edit-actions button { padding: 6px 14px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; border: 1px solid var(--border-light); transition: all 0.2s; }
+  .edit-actions .save-btn { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .edit-actions .save-btn:hover { background: var(--accent-hover); }
+  .edit-actions .cancel-btn { background: var(--white); color: var(--text-muted); }
+  .edit-actions .cancel-btn:hover { color: var(--heading-dark); }
+  .prompt-full-text { white-space: pre-wrap; word-break: break-word; }
+
   /* ── Footer ── */
   .footer { background: var(--heading-dark); padding: 32px 0; }
   .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
@@ -1036,7 +1055,10 @@ function render() {
 
     // Script
     bodyContent += `<div class="section-label">Script</div>
-      <div class="script-block"><p>${sec.script.replace(/\n/g,'<br>')}</p></div>`;
+      <div class="script-block editable-block" data-field="script" data-day="${activeDay}" data-sec="${si}">
+        <button class="edit-btn" onclick="event.stopPropagation();startEdit(this,'script',${activeDay},${si})">Edit</button>
+        <div class="display-content"><p>${sec.script.replace(/\n/g,'<br>')}</p></div>
+      </div>`;
 
     // Key points
     if (sec.keyPoints) {
@@ -1047,33 +1069,38 @@ function render() {
 
     // TikTok Format (for Gen Z hooks)
     if (sec.tiktokFormat) {
-      bodyContent += `<div style="background:linear-gradient(135deg,#7c3aed10,#7c3aed05);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:16px;margin-bottom:12px">
+      bodyContent += `<div class="editable-block" style="background:linear-gradient(135deg,#7c3aed10,#7c3aed05);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:16px;margin-bottom:12px;position:relative">
+        <button class="edit-btn" onclick="event.stopPropagation();startEdit(this,'tiktokFormat',${activeDay},${si})">Edit</button>
         <h5 style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#7c3aed;margin-bottom:8px">TikTok Trend Format</h5>
-        <p style="font-size:0.78rem;color:var(--text-primary);line-height:1.6;margin:0">${sec.tiktokFormat}</p>
+        <div class="display-content"><p style="font-size:0.78rem;color:var(--text-primary);line-height:1.6;margin:0">${sec.tiktokFormat}</p></div>
       </div>`;
     }
 
     // Set Design (for AIOS/real shoots)
     if (sec.setDesign) {
-      bodyContent += `<div class="set-design"><h5>Set Design</h5><ul>`;
+      bodyContent += `<div class="set-design editable-block">
+        <button class="edit-btn" onclick="event.stopPropagation();startEdit(this,'setDesign',${activeDay},${si})">Edit</button>
+        <h5>Set Design</h5><div class="display-content"><ul>`;
       if (sec.setDesign.location) bodyContent += `<li><strong>Location:</strong> ${sec.setDesign.location}</li>`;
       if (sec.setDesign.lighting) bodyContent += `<li><strong>Lighting:</strong> ${sec.setDesign.lighting}</li>`;
       if (sec.setDesign.props) bodyContent += `<li><strong>Props:</strong> ${sec.setDesign.props}</li>`;
       if (sec.setDesign.wardrobe) bodyContent += `<li><strong>Wardrobe:</strong> ${sec.setDesign.wardrobe}</li>`;
       if (sec.setDesign.camera) bodyContent += `<li><strong>Camera:</strong> ${sec.setDesign.camera}</li>`;
       if (sec.setDesign.framing) bodyContent += `<li><strong>Framing:</strong> ${sec.setDesign.framing}</li>`;
-      bodyContent += `</ul></div>`;
+      bodyContent += `</ul></div></div>`;
     }
 
     // Editing & Transitions (for AIOS/real shoots)
     if (sec.editing) {
-      bodyContent += `<div class="editing-block"><h5>Editing & Transitions</h5><ul>`;
+      bodyContent += `<div class="editing-block editable-block">
+        <button class="edit-btn" onclick="event.stopPropagation();startEdit(this,'editing',${activeDay},${si})">Edit</button>
+        <h5>Editing & Transitions</h5><div class="display-content"><ul>`;
       if (sec.editing.cuts) bodyContent += `<li><strong>Cuts:</strong> ${sec.editing.cuts}</li>`;
       if (sec.editing.transitions) bodyContent += `<li><strong>Transitions:</strong> ${sec.editing.transitions}</li>`;
       if (sec.editing.text) bodyContent += `<li><strong>On-Screen Text:</strong> ${sec.editing.text}</li>`;
       if (sec.editing.sound) bodyContent += `<li><strong>Sound Design:</strong> ${sec.editing.sound}</li>`;
       if (sec.editing.pacing) bodyContent += `<li><strong>Pacing:</strong> ${sec.editing.pacing}</li>`;
-      bodyContent += `</ul></div>`;
+      bodyContent += `</ul></div></div>`;
     }
 
     // Meta info (music, hook, duration)
@@ -1091,18 +1118,20 @@ function render() {
       if (sec.nanoPrompts) {
         promptCards += `<div class="model-info"><span class="model-info-icon">&#127912;</span><div><strong>Nano Banana — Image Generation</strong><p>Click to copy</p></div></div>`;
         sec.nanoPrompts.forEach((np, ni) => {
-          promptCards += `<div class="transition-card" onclick="copyPrompt(this, ${activeDay}, ${si}, 'nano', ${ni})">
+          promptCards += `<div class="transition-card editable-block" onclick="copyPrompt(this, ${activeDay}, ${si}, 'nano', ${ni})">
+            <button class="edit-btn" onclick="event.stopPropagation();startEdit(this,'nanoPrompt',${activeDay},${si},${ni})">Edit</button>
             <div class="transition-card-header"><div class="transition-panels"><span class="panel-num">STEP ${np.step}</span><span class="transition-label">${np.label}</span></div><span class="transition-copy-hint">Click to copy</span></div>
-            <div class="transition-card-body"><p>${np.prompt.substring(0, 180)}...</p></div></div>`;
+            <div class="transition-card-body"><div class="display-content"><p class="prompt-full-text">${np.prompt.replace(/\n/g,'<br>')}</p></div></div></div>`;
         });
       }
       if (sec.i2vClips) {
         const totalDur = sec.i2vClips.reduce((s,cl) => s + cl.duration, 0);
         promptCards += `<div class="model-info" style="margin-top:12px"><span class="model-info-icon">&#127916;</span><div><strong>Veo 3.1 — Image to Video</strong><p>${sec.i2vClips.length} clips = ~${totalDur}s</p></div></div>`;
         sec.i2vClips.forEach((cl, ci) => {
-          promptCards += `<div class="transition-card" onclick="copyPrompt(this, ${activeDay}, ${si}, 'i2v', ${ci})">
+          promptCards += `<div class="transition-card editable-block" onclick="copyPrompt(this, ${activeDay}, ${si}, 'i2v', ${ci})">
+            <button class="edit-btn" onclick="event.stopPropagation();startEdit(this,'i2vClip',${activeDay},${si},${ci})">Edit</button>
             <div class="transition-card-header"><div class="transition-panels"><span class="panel-num">CLIP ${ci+1}</span><span class="transition-label">${cl.label}</span><span class="panel-arrow">|</span><span class="panel-num">Panels ${cl.panels}</span></div><span class="transition-copy-hint">Click to copy</span></div>
-            <div class="transition-card-body"><p>${cl.motion.substring(0, 180)}...</p>
+            <div class="transition-card-body"><div class="display-content"><p class="prompt-full-text">${cl.motion.replace(/\n/g,'<br>')}</p></div>
               <div class="f2v-specs"><div class="f2v-spec"><span>Upload </span>Panel ${cl.inputPanel}</div><div class="f2v-spec"><span>Duration </span>${cl.duration}s</div><div class="f2v-spec"><span>Lip-sync </span>${cl.lipSync || 'No'}</div></div>
             </div></div>`;
         });
@@ -1152,6 +1181,93 @@ function copyPrompt(el, dayIdx, secIdx, type, promptIdx) {
     hint.textContent = 'Copied!';
     setTimeout(() => { el.classList.remove('copied'); hint.textContent = 'Click to copy'; }, 2000);
   });
+}
+
+function startEdit(btn, field, dayIdx, secIdx, promptIdx) {
+  const plan = PRODUCTS[activeProduct].plan;
+  const sec = plan[dayIdx].sections[secIdx];
+  const block = btn.closest('.editable-block');
+  const display = block.querySelector('.display-content');
+  const isDark = block.classList.contains('editing-block');
+  let currentValue = '';
+
+  if (field === 'script') currentValue = sec.script;
+  else if (field === 'tiktokFormat') currentValue = sec.tiktokFormat;
+  else if (field === 'setDesign') {
+    const sd = sec.setDesign;
+    currentValue = ['location','lighting','props','wardrobe','camera','framing']
+      .filter(k => sd[k]).map(k => k.charAt(0).toUpperCase()+k.slice(1)+': '+sd[k]).join('\n');
+  }
+  else if (field === 'editing') {
+    const ed = sec.editing;
+    currentValue = [['cuts','Cuts'],['transitions','Transitions'],['text','On-Screen Text'],['sound','Sound Design'],['pacing','Pacing']]
+      .filter(([k]) => ed[k]).map(([k,l]) => l+': '+ed[k]).join('\n');
+  }
+  else if (field === 'nanoPrompt') currentValue = sec.nanoPrompts[promptIdx].prompt;
+  else if (field === 'i2vClip') currentValue = sec.i2vClips[promptIdx].motion;
+
+  btn.style.display = 'none';
+  display.style.display = 'none';
+
+  const editor = document.createElement('div');
+  editor.className = 'inline-edit-area';
+  const ta = document.createElement('textarea');
+  ta.className = 'inline-editor' + (isDark ? ' dark' : '');
+  ta.value = currentValue;
+  ta.rows = Math.max(4, currentValue.split('\n').length + 1);
+  ta.onclick = (e) => e.stopPropagation();
+
+  const actions = document.createElement('div');
+  actions.className = 'edit-actions';
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'save-btn';
+  saveBtn.textContent = 'Save';
+  saveBtn.onclick = (e) => {
+    e.stopPropagation();
+    const val = ta.value;
+    if (field === 'script') sec.script = val;
+    else if (field === 'tiktokFormat') sec.tiktokFormat = val;
+    else if (field === 'setDesign') {
+      val.split('\n').forEach(line => {
+        const idx = line.indexOf(':');
+        if (idx === -1) return;
+        const key = line.substring(0, idx).trim().toLowerCase();
+        const v = line.substring(idx + 1).trim();
+        if (key === 'on-screen text') sec.setDesign.text = v;
+        else if (key === 'sound design') sec.setDesign.sound = v;
+        else if (sec.setDesign.hasOwnProperty(key)) sec.setDesign[key] = v;
+      });
+    }
+    else if (field === 'editing') {
+      val.split('\n').forEach(line => {
+        const idx = line.indexOf(':');
+        if (idx === -1) return;
+        const label = line.substring(0, idx).trim();
+        const v = line.substring(idx + 1).trim();
+        const map = {'Cuts':'cuts','Transitions':'transitions','On-Screen Text':'text','Sound Design':'sound','Pacing':'pacing'};
+        if (map[label]) sec.editing[map[label]] = v;
+      });
+    }
+    else if (field === 'nanoPrompt') sec.nanoPrompts[promptIdx].prompt = val;
+    else if (field === 'i2vClip') sec.i2vClips[promptIdx].motion = val;
+    render();
+  };
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'cancel-btn';
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.onclick = (e) => {
+    e.stopPropagation();
+    editor.remove();
+    display.style.display = '';
+    btn.style.display = '';
+  };
+
+  actions.appendChild(cancelBtn);
+  actions.appendChild(saveBtn);
+  editor.appendChild(ta);
+  editor.appendChild(actions);
+  display.parentNode.insertBefore(editor, display.nextSibling);
+  ta.focus();
 }
 
 activeDay = getTodayIndex();
