@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "skills": {
+    "canvas-design": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "fb50ae1bffcea9bb24497b76d305f6581b766bfb263890c2d36ac10d590b83ca"
+    },
+    "create-plan": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "164310f2d758a36ac3f79166683bf5a92696eecc8b7258bfeb5091a0f2715e6a"
+    },
+    "develop-web-game": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "2a66c44887fcc585d7b3ea0605d5440177737db60cb42da52088e34ec41f5ad1"
+    },
+    "docx": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "18ae64b1d2d865a16a6498a644e78d8cdaa29c36f542305ca9bbf0dc810867d0"
+    },
+    "films-search": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "f57f9a10b2bdd8851e94ee0b2a8a267056c622ac36eb46e6cf7b1ce5eb45baa6"
+    },
+    "frontend-design": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "2c5fc01e7982e8bdfbbbfca6322019745da6adaf50d8193b6b9474c68d0de3c0"
+    },
+    "imap-smtp-email": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "6123aa032059e173a893f5a963544007cc78a8e1fa6f8573593f4fbd6f5c7fd7"
+    },
+    "local-tools": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "5487eca6c162693b0da912b69f4c3d923849a2994df79a6e777f7a04400b9469"
+    },
+    "music-search": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "d680608f74c813b80bfbc14ebf1e0bdd7a77d9ce716faad255647075298c88bf"
+    },
+    "pdf": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "965ba3032d02374c2c6f360c24b701bd7e2381f9725a09d8eeb7cb810114e206"
+    },
+    "playwright": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "f4b215379af184684580dc167b4c47b5adedcd0b160e775a3d8aa00720ea05e0"
+    },
+    "pptx": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "423c158fa51ae38463b78701ba945b29eae02032ecc23a602e663cbcf59f81d2"
+    },
+    "remotion-best-practices": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "ea18aead60ed161ac8af00db2473739ee44b22402331bd3be2a19caa46a67d49"
+    },
+    "scheduled-task": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "95fa396e6beaa14680eeb3a839d5587880f1672cc35a8ab947af3de8fcba8be6"
+    },
+    "seedance": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "0f1496f27bcc8cc5600ad77dbadf0e3e5f6d3476114c3267877a9c6a86cbebc9"
+    },
+    "seedream": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "1a8c0b2282737fe1b8e4b4c179a52c4df935b5baac5d9ea78f079789fbcf2c4e"
+    },
+    "skill-creator": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "d53b2dab6bfbc0828297a0e55f2eed614bceb2931f36676e547c970859a5d736"
+    },
+    "technology-search": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "3012609947232f66107953f307cfface7943b090a1a29aeeec7633619396d7e5"
+    },
+    "weather": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "518f620046ce786e28adfa58e14ab3ca192ee0f8d7c2dc5cc7e56bc642ddcae9"
+    },
+    "web-search": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "5d408c00585b8c6fc0e32e7a3adc589dc04693024083dfbd3dc541f3cb18794e"
+    },
+    "xlsx": {
+      "source": "netease-youdao/LobsterAI",
+      "sourceType": "github",
+      "computedHash": "a35b5908585e8582b7e16df3242fc436b89d594e5097197045b4127360fdf1a9"
+    }
+  }
+}
