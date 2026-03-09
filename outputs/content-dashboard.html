@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Dashboard — Adletic Agency</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-dark: #08131f;
+    --bg-dark-2: #0d1f30;
+    --bg-grey: #F7F8FA;
+    --text-primary: #374151;
+    --text-muted: #6B7280;
+    --heading-dark: #0d1117;
+    --accent: #f26522;
+    --accent-hover: #d9541a;
+    --accent-light: rgba(242, 101, 34, 0.10);
+    --white: #FFFFFF;
+    --border-light: #E5E7EB;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg-grey); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+  /* Navigation */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; font-weight: 700; color: var(--heading-dark); letter-spacing: -0.01em; }
+  .nav-logo { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
+  .nav-date { font-size: 0.875rem; font-weight: 500; color: var(--text-muted); }
+  .nav-date strong { color: var(--heading-dark); }
+
+  /* Hero */
+  .hero-header { background: var(--bg-dark); padding: 48px 0 56px; position: relative; overflow: hidden; }
+  .hero-header::before { content: ''; position: absolute; right: -80px; top: -80px; width: 300px; height: 300px; background: var(--accent); opacity: 0.06; border-radius: 50%; }
+  .hero-header::after { content: ''; position: absolute; left: -40px; bottom: -60px; width: 200px; height: 200px; background: var(--accent); opacity: 0.04; border-radius: 50%; }
+  .hero-content { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; text-align: center; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.58); margin-bottom: 20px; }
+  .eyebrow-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulse-dot 2.5s ease-in-out infinite; }
+  @keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 0 rgba(242,101,34,0.7); } 50% { box-shadow: 0 0 0 8px rgba(242,101,34,0); } }
+  .hero-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; color: #fff; line-height: 1.12; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .hero-title-accent { color: var(--accent); }
+  .hero-subtitle { font-size: clamp(0.95rem, 1.8vw, 1.1rem); color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 560px; margin: 0 auto; font-weight: 400; }
+
+  /* Week Strip */
+  .week-section { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .week-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+    margin: -28px auto 32px; position: relative; z-index: 10;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 6px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); max-width: 680px;
+  }
+  .week-dot { text-align: center; padding: 12px 4px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; border: 1.5px solid transparent; }
+  .week-dot:hover { background: rgba(255,255,255,0.08); }
+  .week-dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 4px 12px rgba(242,101,34,0.3); }
+  .week-dot.active .dot-day, .week-dot.active .dot-num { color: #fff !important; }
+  .week-dot.active .dot-status { background: #fff !important; }
+  .week-dot .dot-day { font-size: 0.62rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
+  .week-dot .dot-num { font-size: 1.25rem; font-weight: 800; color: rgba(255,255,255,0.8); margin: 3px 0; letter-spacing: -0.02em; }
+  .week-dot .dot-status { width: 6px; height: 6px; border-radius: 50%; margin: 0 auto; }
+  .week-dot.past .dot-num { color: rgba(255,255,255,0.3); }
+  .week-dot.past .dot-status { background: rgba(255,255,255,0.2); }
+  .week-dot.today .dot-num { color: var(--accent); }
+  .week-dot.today .dot-status { background: var(--accent); }
+  .week-dot.upcoming .dot-num { color: rgba(255,255,255,0.7); }
+  .week-dot.upcoming .dot-status { background: rgba(255,255,255,0.3); }
+
+  /* Main */
+  .main-content { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* Day Card */
+  .day-card { background: var(--white); border: 1px solid var(--border-light); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); }
+
+  /* Card Header */
+  .card-header { display: flex; align-items: flex-start; gap: 14px; padding: 28px 28px 24px; border-bottom: 1px solid var(--border-light); background: linear-gradient(135deg, #fff7f3 0%, #fff 100%); }
+  .card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(242,101,34,0.12); color: var(--accent); font-size: 1.2rem; }
+  .card-header-text h2 { font-size: 1.15rem; font-weight: 700; color: var(--heading-dark); letter-spacing: -0.015em; margin-bottom: 4px; line-height: 1.3; }
+  .card-header-text p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 0; }
+  .card-header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; align-self: center; }
+  .status-badge { display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 100px; padding: 4px 12px; white-space: nowrap; }
+  .status-badge.today { color: #fff; background: var(--accent); }
+  .status-badge.past { color: #065f46; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.22); }
+  .status-badge.upcoming { color: #1e3a8a; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.22); }
+  .content-type-chip { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 100px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.02em; border: 1px solid transparent; white-space: nowrap; }
+  .content-type-chip.educate { background: rgba(59,130,246,0.1); color: #1e3a8a; border-color: rgba(59,130,246,0.22); }
+  .content-type-chip.engage { background: rgba(139,92,246,0.1); color: #5b21b6; border-color: rgba(139,92,246,0.22); }
+  .content-type-chip.proof { background: rgba(16,185,129,0.1); color: #064e3b; border-color: rgba(16,185,129,0.22); }
+  .content-type-chip.community { background: rgba(242,101,34,0.1); color: #b74c0e; border-color: rgba(242,101,34,0.2); }
+
+  /* Card Body 2-col */
+  .card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .card-left { padding: 24px 28px; border-right: 1px solid var(--border-light); }
+  .card-right { padding: 24px 28px; display: flex; flex-direction: column; }
+
+  .section-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #9CA3AF; margin-bottom: 16px; }
+  .framework-badge { display: inline-block; font-size: 0.68rem; font-weight: 800; color: var(--accent); background: var(--accent-light); border: 1px solid rgba(242,101,34,0.2); border-radius: 100px; padding: 4px 12px; margin-bottom: 18px; letter-spacing: 0.02em; }
+
+  .meta-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+  .meta-item { display: flex; align-items: flex-start; gap: 10px; }
+  .meta-item-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; line-height: 1; }
+  .meta-item strong { display: block; font-size: 0.82rem; font-weight: 600; color: var(--heading-dark); margin-bottom: 1px; }
+  .meta-item p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin: 0; }
+
+  .script-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; border: 1.5px solid var(--accent); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; background: transparent; color: var(--accent); margin-top: 4px; }
+  .script-toggle:hover { background: var(--accent); color: var(--white); transform: translateY(-2px); }
+  .script-box { display: none; margin-top: 16px; padding: 20px; background: var(--bg-grey); border: 1px solid var(--border-light); border-radius: 14px; }
+  .script-box.open { display: block; }
+  .script-box p { font-size: 0.875rem; line-height: 1.85; color: var(--text-primary); font-style: italic; }
+  .script-cta { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-light); font-size: 0.82rem; font-weight: 600; color: var(--accent); font-style: normal; }
+
+  /* Checklist */
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 0; flex: 1; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #F3F4F6; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 20px; height: 20px; min-width: 20px; border: 2px solid var(--border-light); border-radius: 6px; cursor: pointer; margin-top: 2px; transition: all 0.2s; position: relative; background: var(--white); }
+  .checklist input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); }
+  .checklist input[type="checkbox"]:checked::after { content: ''; position: absolute; left: 5px; top: 1px; width: 6px; height: 10px; border: solid var(--white); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .checklist label { cursor: pointer; line-height: 1.4; flex: 1; }
+  .checklist label .task-title { font-size: 0.82rem; color: var(--heading-dark); font-weight: 600; display: block; margin-bottom: 1px; }
+  .checklist label .task-detail { font-size: 0.75rem; color: var(--text-muted); display: block; }
+  .checklist input[type="checkbox"]:checked + label .task-title { color: #9CA3AF; text-decoration: line-through; }
+  .checklist input[type="checkbox"]:checked + label .task-detail { color: #D1D5DB; }
+  .progress-wrap { margin-top: auto; padding-top: 16px; }
+  .progress-bar { width: 100%; height: 4px; background: #F3F4F6; border-radius: 2px; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+  .progress-text { font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; text-align: right; font-weight: 600; }
+
+  /* ── Prompts Section ── */
+  .prompts-section { border-top: 1px solid var(--border-light); padding: 28px; }
+  .prompts-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .prompts-section-header h3 { font-size: 1.05rem; font-weight: 700; color: var(--heading-dark); letter-spacing: -0.01em; }
+
+  /* Prompt Tabs — matches website pricing-tabs */
+  .prompt-tabs {
+    display: flex; background: var(--bg-grey); border: 1px solid var(--border-light);
+    border-radius: 14px; padding: 5px; margin-bottom: 24px; gap: 4px;
+  }
+  .prompt-tab {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 11px 14px; border: none; border-radius: 10px; background: transparent;
+    color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.82rem;
+    font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap;
+  }
+  .prompt-tab.active { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(242,101,34,0.3); }
+  .prompt-tab:not(.active):hover { background: var(--white); color: var(--heading-dark); }
+  .prompt-tab .tab-icon { font-size: 0.95rem; }
+
+  /* Nano Banana — single prompt */
+  .nano-prompt-box {
+    background: var(--bg-grey); border: 1px solid var(--border-light); border-radius: 14px;
+    padding: 24px; position: relative; cursor: pointer; transition: all 0.2s ease;
+  }
+  .nano-prompt-box:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
+  .nano-prompt-box .copy-btn {
+    position: absolute; right: 16px; top: 16px; font-size: 0.65rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);
+    background: var(--white); border: 1px solid var(--border-light); border-radius: 6px;
+    padding: 5px 10px; cursor: pointer; transition: all 0.2s;
+  }
+  .nano-prompt-box:hover .copy-btn { color: var(--accent); border-color: var(--accent); }
+  .nano-prompt-box.copied { border-color: var(--accent); background: rgba(242,101,34,0.03); }
+  .nano-prompt-box.copied .copy-btn { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .nano-prompt-box p { font-size: 0.8rem; color: var(--text-primary); line-height: 1.7; white-space: pre-wrap; }
+  .nano-prompt-box .panel-label { color: var(--accent); font-weight: 700; }
+  .nano-prompt-box .hook-label { color: var(--accent); font-weight: 800; background: var(--accent-light); padding: 1px 6px; border-radius: 4px; font-size: 0.72rem; }
+
+  /* Video Transitions */
+  .transitions-grid { display: flex; flex-direction: column; gap: 12px; }
+  .transition-card {
+    background: var(--bg-grey); border: 1px solid var(--border-light); border-radius: 14px;
+    overflow: hidden; transition: all 0.2s ease; cursor: pointer;
+  }
+  .transition-card:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+  .transition-card.copied { border-color: var(--accent); background: rgba(242,101,34,0.03); }
+  .transition-card-header {
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 18px;
+    border-bottom: 1px solid var(--border-light); background: linear-gradient(135deg, #fff7f3 0%, var(--bg-grey) 100%);
+  }
+  .transition-panels { display: flex; align-items: center; gap: 8px; }
+  .panel-num {
+    font-size: 0.68rem; font-weight: 800; color: var(--accent);
+    background: var(--accent-light); border: 1px solid rgba(242,101,34,0.2);
+    border-radius: 6px; padding: 3px 8px; letter-spacing: 0.04em;
+  }
+  .panel-arrow { color: var(--text-muted); font-size: 0.8rem; }
+  .transition-label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .transition-copy-hint {
+    font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text-muted); opacity: 0; transition: opacity 0.2s;
+  }
+  .transition-card:hover .transition-copy-hint { opacity: 1; }
+  .transition-card.copied .transition-copy-hint { opacity: 1; color: var(--accent); }
+  .transition-card-body { padding: 14px 18px; }
+  .transition-card-body p { font-size: 0.8rem; color: var(--text-primary); line-height: 1.65; margin: 0; }
+
+  /* F2V specs row */
+  .f2v-specs {
+    display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
+  }
+  .f2v-spec {
+    font-size: 0.68rem; font-weight: 700; padding: 4px 10px;
+    background: var(--white); border: 1px solid var(--border-light);
+    border-radius: 6px; color: var(--heading-dark);
+  }
+  .f2v-spec span { color: var(--text-muted); font-weight: 500; }
+
+  /* Model info banner */
+  .model-info {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+    background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%);
+    border-radius: 12px; margin-bottom: 16px;
+  }
+  .model-info-icon { font-size: 1.1rem; }
+  .model-info strong { font-size: 0.82rem; font-weight: 700; color: #fff; display: block; margin-bottom: 1px; }
+  .model-info p { font-size: 0.72rem; color: rgba(255,255,255,0.5); margin: 0; line-height: 1.4; }
+
+  /* Footer */
+  .footer { background: var(--heading-dark); padding: 32px 0; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+  .footer p { font-size: 0.8rem; color: rgba(255,255,255,0.3); margin: 0; }
+  .footer a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s ease; }
+  .footer a:hover { color: var(--accent); }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .card-body { grid-template-columns: 1fr; }
+    .card-left { border-right: none; border-bottom: 1px solid var(--border-light); }
+  }
+  @media (max-width: 768px) {
+    .nav-inner { height: 60px; padding: 0 16px; }
+    .hero-header { padding: 32px 0 44px; }
+    .hero-content { padding: 0 16px; }
+    .week-strip { margin-top: -24px; }
+    .main-content { padding: 24px 16px 64px; }
+    .card-header { padding: 20px; flex-wrap: wrap; }
+    .card-header-right { margin-left: 0; margin-top: 8px; }
+    .card-left, .card-right { padding: 20px; }
+    .prompts-section { padding: 20px; }
+    .prompt-tabs { flex-wrap: wrap; }
+    .prompt-tab { font-size: 0.75rem; padding: 9px 10px; }
+    .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .week-strip { gap: 2px; padding: 4px; }
+    .week-dot { padding: 8px 2px; }
+    .week-dot .dot-num { font-size: 1rem; }
+    .hero-title { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="nav-inner">
+  <div class="nav-brand"><div class="nav-logo">A</div><span>Adletic Agency</span></div>
+  <div class="nav-date" id="topDate"></div>
+</div></nav>
+
+<section class="hero-header">
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span class="eyebrow-dot"></span>AI UGC Content Lab</div>
+    <h1 class="hero-title">Weekly <span class="hero-title-accent">UGC Plan</span></h1>
+    <p class="hero-subtitle">Hyper-realistic AI-generated Malaysian Gen Z creators. Looks real. Sounds real. None of them exist.</p>
+  </div>
+  <div class="week-section"><div class="week-strip" id="weekOverview"></div></div>
+</section>
+
+<div class="main-content" id="cardsContainer"></div>
+
+<footer class="footer"><div class="footer-inner">
+  <p>&copy; 2026 Adletic Agency</p>
+  <p><a href="https://adleticagency.com">adleticagency.com</a></p>
+</div></footer>
+
+<script>
+const TASKS_TEMPLATE = [
+  { title: 'Generate face + scene images in Nano Banana', detail: 'Paste UGC prompt. All 4 panels in one generation. Check face consistency across panels.' },
+  { title: 'Select best 4 panels for video sequence', detail: 'Pick panels with most realistic skin texture, natural expressions, and consistent facial features.' },
+  { title: 'Record voice overlay in casual Malaysian English', detail: 'Natural tone, slight Malaysian accent. Talk like you are talking to a friend, not presenting.' },
+  { title: 'Edit final video (15-30s vertical)', detail: '9:16 aspect ratio, iPhone-quality export. Match trending TikTok audio.' },
+  { title: 'Add on-screen hook text in first 1s', detail: 'Casual font, slightly off-center like real UGC. See hook text above.' },
+  { title: 'Post to TikTok at 7pm MYT', detail: 'Trending sounds + hashtags. Caption must feel like a real person wrote it.' },
+  { title: 'Post to Instagram Reels at 8pm MYT', detail: 'Cross-post to IG Stories. Use link in bio if applicable.' },
+  { title: "Prep tomorrow's prompts", detail: "Copy tomorrow's Nano Banana prompt and start generating overnight." }
+    ];
+
+const CONTENT_PLAN = [
+  {
+    day: 'Monday', title: 'MY RM12 SKINCARE ROUTINE', contentType: 'educate', contentTypeLabel: 'Educate',
+    framework: 'IG Story \u2192 AI Reveal', location: 'Bathroom selfie',
+    bgElement: 'Skincare routine \u2192 mid-way AI reveal',
+    music: 'Trending chill lo-fi, soft background vibes',
+    hookText: 'My RM12 cleanser cleared my skin in 2 weeks',
+    script: `Okay so this cleanser right, RM12 je from Shopee.\nMy friend recommend, aku macam yeah right lah.\nTwo weeks later bro.\nMy skin cleared up gila.\nLike no filter, this is literally bare face right now.\nTexture improved, redness semua gone.\nAku just wash morning and night je. Nothing fancy.\nOh wait \u2014 jap.\nAku kena bagitau korang something.\nI'm not real.\nLiterally. AI generated.\nThis face, this skin, this bathroom \u2014\nnone of it exists.\nTapi cleanser tu memang real lah. CeraVe best.`,
+    cta: 'Tapi seriously CeraVe tu real lah. Go try.',
+    nanoPrompts: [
+      { panels: 'avatar', panelCount: 1, label: 'AVATAR',
+        prompt: `Hyper-realistic character portrait. Shot on iPhone 15 Pro, vertical 9:16. Absolutely NO AI plastic look, NO beauty filter, NO skin smoothing, NO CGI. No text overlays. Must be indistinguishable from a real person's photo.
+
+CRITICAL SKIN REALISM: Every panel must show visible skin pores (especially nose, cheeks, forehead), natural peach fuzz on jawline and upper lip caught by warm light, subtle under-eye darkness, natural uneven pale skin tone with rosy pink flush on cheeks and slight tan line on nose bridge, slightly darker around mouth, one or two tiny healed acne marks on chin, visible sebaceous filaments on nose. Skin has natural sheen from humidity. No pore-filling, no airbrushing.
+
+Subject: Young woman, 21, mixed Malay-Chinese heritage. Oval face, soft natural double eyelids with slight asymmetry (left crease slightly higher), pale fair skin with light sun-kissed tan on cheeks and nose bridge (NC15-20 with warm undertone), high cheekbones, small flat nose with wider nostrils, full lips with subtle pink lip gloss. Dark brown-black hair in messy tortoiseshell claw clip bun with wispy face-framing baby hairs at temples. Natural thick eyebrows, minimal makeup \u2014 just concealer and lip gloss. Slight natural dark circles under eyes. Wearing oversized washed-out vintage grey band tee slipping off one shoulder. Small gold stud earrings. Fine dark arm hair visible. Looks like a real Malaysian TikTok creator with 200K followers \u2014 pretty but approachable. Not model-perfect. Human.
+
+Generate a hyper-realistic character portrait. CU (Close-Up) from chest up, shot on 85mm portrait lens with shallow depth of field. Subject looking at camera with relaxed natural expression. Warm practical lighting from the side creating Rembrandt triangle. Visible skin pores, natural texture, no smoothing. Vertical 9:16. This image will be used as the character reference for all storyboard panels. No CGI look.` },
+      { panels: '1-4', panelCount: 4, label: 'HOOK',
+        prompt: `Hyper-realistic 4-panel UGC-style storyboard. Shot on iPhone 15 Pro, vertical 9:16. Absolutely no AI-generated plastic look, no beauty filter, no skin smoothing, no CGI, no retouching. Absolutely NO text overlays, no captions, no watermarks, no UI elements, no titles rendered into any panel. Pure photography only. Must be completely indistinguishable from a real TikTok creator's content. 4-panel hook sequence that builds narrative tension before the AI reveal.
+
+Location progression: Panels 1-2 in a small Malaysian apartment bathroom (pastel pink-white tiles, cluttered counter with CeraVe, Cosrx, Garnier, warm yellow light, ring light clipped to mirror). Panels 3-8 transition to her bedroom desk setup (IKEA desk, MacBook Pro open, ring light on tripod, sticky notes on wall, iced coffee, warm desk lamp, fairy lights on wall behind).
+
+CHARACTER REFERENCE: Use the uploaded avatar image as the character in ALL panels. The face, skin texture, features, clothing, and accessories must match the avatar exactly. Maintain perfect character consistency across every panel.
+
+PANEL 1 (HOOK): iPhone front camera selfie. Girl in bathroom looking directly into camera held slightly above eye level. Ring light catch visible as concentric circles in both irises. One hand holding phone, other touching her cheek showing clear skin. Slight head tilt, relaxed half-smile. Skincare products blurred on counter behind. Natural phone camera depth of field. Visible pores on nose and cheeks, peach fuzz on jawline, natural under-eye shadow. Authentic selfie energy \u2014 she looks like she just hit record.
+
+PANEL 2 (HOOK): Same angle, she's reached for CeraVe cleanser bottle, holding it up to show camera while still talking enthusiastically. Her expression is bright and engaged, mouth open mid-word explaining the product. Ring light creating perfect catch lights. Natural phone camera depth of field. Visible pores, natural skin texture.
+
+PANEL 3 (HOOK): Close-up of her hand squeezing cleanser onto fingertips over sink, but her face is visible in background, still talking and explaining the routine. Foam beginning to form on fingertips. Her expression is focused but still conversational. The moment just before the reveal.
+
+PANEL 4 (HOOK): Back to front camera selfie angle. Her expression has completely shifted - mouth slightly open, eyes widened in realization, hand frozen mid-gesture. The exact moment of "jap, before that, I am entirely AI generated tau, hehe." The energy has shifted from bubbly influencer to something uncanny. Same lighting, same setup, but the reveal moment.` }
+    ],
+    i2vClips: [
+      { panels: '1-2', label: 'Skincare Selfie', inputPanel: 1, duration: 8, lipSync: 'Yes',
+        motion: `Girl talking to front camera in bathroom, natural head tilts and hand gestures touching cheek. Ring light catch in both eyes. Slight authentic phone shake. Warm yellow bathroom lighting. Natural blinking, micro-expressions, lips moving naturally.
+
+AUDIO/DIALOGUE (female, 21, Malaysian English, casual Gen Z KL accent, warm and bubbly):
+"Okay so this cleanser right, RM12 je from Shopee. My friend recommend, aku macam yeah right lah. But then two weeks later bro, my skin cleared up gila. Like no filter, this is literally bare face right now."` },
+      { panels: '2-3', label: 'Product Show', inputPanel: 2, duration: 8, lipSync: 'Yes',
+        motion: `Girl holding CeraVe bottle up to camera, enthusiastic expression, gesturing with free hand. Bright engaged energy. Bathroom ring light, natural phone camera depth. Tapping the bottle label.
+
+AUDIO/DIALOGUE (same voice, still in skincare mode):
+"Texture improved, redness semua gone. Aku just wash morning and night je. Nothing fancy. It's the CeraVe one lah. I know everyone and their mum uses this already but like, it actually works tau."` },
+      { panels: '4', label: 'AI Reveal', inputPanel: 4, duration: 8, lipSync: 'Yes',
+        motion: `Girl talking to camera, mid-sentence expression shifts. Hand freezes. Eyes widen. Beat of silence. Then shy amused smile breaks through. Same setup, same lighting, completely different energy.
+
+AUDIO/DIALOGUE (same voice, pace slows, slight laugh):
+"Oh wait \u2014 jap. Aku kena bagitau korang something. I'm not real. Like literally AI generated. This face, this skin, this bathroom \u2014 none of it exists. Tapi cleanser tu memang real lah. CeraVe best."` }
+    ],
+},
+  {
+    day: 'Tuesday', title: 'GRWM FIRST DATE', contentType: 'engage', contentTypeLabel: 'Engage',
+    framework: 'IG Story \u2192 AI Reveal', location: 'Bedroom GRWM',
+    bgElement: 'Getting ready routine \u2192 mid-way AI reveal',
+    music: 'Dark ambient electronic, slowed + reverb',
+    hookText: 'POV: 10 minutes before your first date',
+    script: `Okay GRWM first date.\nNervous gila right now.\nShe said casual dinner but like, what does casual even mean??\nBro aku dah tukar shirt three times already.\nGoing with white tee. Classic. Can't go wrong.\n*sprays cologne*\nDior Sauvage. Basic I know, but it works lah.\nHair \u2014 okay I think macam okay dah.\nEh hold on.\nAku actually AI generated.\nYeah for real.\nThis whole GRWM? Didn't happen.\nI don't have a date. I don't have a room.\nI literally don't exist bro.`,
+    cta: 'But Dior Sauvage tu memang solid. No cap.',
+    nanoPrompts: [
+      { panels: 'avatar', panelCount: 1, label: 'AVATAR',
+        prompt: `Hyper-realistic character portrait. Shot on iPhone 15 Pro, vertical 9:16. Absolutely NO AI plastic look, NO beauty filter, NO skin smoothing, NO CGI. No text overlays. Must be indistinguishable from a real person's photo.
+
+CRITICAL SKIN REALISM: Visible pores on nose, inner cheeks, forehead. Natural stubble shadow along jawline and upper lip with individual short hairs visible. Skin has natural oil sheen on T-zone. Subtle texture variation \u2014 rougher on jawline, smoother on cheeks. One small dark mole on right side of neck. Natural eyebrow hair unevenness. Under-eye area shows faint blue-grey vascular shadow. Lips have natural dry texture with slight chapping. Adam's apple visible with natural skin creasing when turning.
+
+Subject: Young man, 22, mixed Malay-Indian heritage. Strong defined jawline, light brown caramel skin (NC35-40), thick dark eyebrows naturally full, visible stubble shadow, deep brown almost-black expressive eyes with thick lashes, wavy dark hair styled messy pushed back with fingers, straight nose with slight bump on bridge, defined cheekbones. Plain white crew neck tee. Small silver hoop earring left ear. Naturally lean and angular. Looks like a Malaysian TikTok heartthrob with distinctly South-Southeast Asian features.
+
+Generate a hyper-realistic character portrait. CU (Close-Up) from chest up, shot on 85mm portrait lens with shallow depth of field. Subject looking at camera with relaxed natural expression. Warm practical lighting from the side creating Rembrandt triangle. Visible skin pores, natural texture, no smoothing. Vertical 9:16. This image will be used as the character reference for all storyboard panels. No CGI look.` },
+      { panels: '1-4', panelCount: 4, label: 'HOOK',
+        prompt: `Hyper-realistic 4-panel UGC-style storyboard. Shot on iPhone 15 Pro, vertical 9:16. Absolutely no AI-generated plastic skin, no beauty filter, no smoothing, no CGI. Absolutely NO text overlays, no captions, no watermarks, no UI elements, no titles rendered into any panel. Pure photography only. Must be completely indistinguishable from a real Malaysian guy's TikTok content. 4-panel hook sequence building to the reveal moment.
+
+Location progression: Panels 1-2 in his bedroom (IKEA MALM dresser with cologne bottles, unmade bed with dark navy sheets, standing mirror, sneakers on floor, fairy lights on ceiling). Panels 3-8 at his desk setup in the same room (the desk area has a laptop with a second monitor, reference images pinned to a small corkboard behind the screens, ring light, headphones on desk).
+
+CHARACTER REFERENCE: Use the uploaded avatar image as the character in ALL panels. The face, skin texture, features, clothing, and accessories must match the avatar exactly. Maintain perfect character consistency across every panel.
+
+PANEL 1 (HOOK): POV from phone propped on dresser. Guy standing in front of mirror adjusting damp wavy hair with one hand. Room visible around him \u2014 messy bed, sneakers, fairy lights. Warm bedroom light from above. Phone-camera perspective slightly looking up. Barefoot, white tee and dark jeans, belt undone. Post-shower skin sheen. Natural and candid \u2014 classic GRWM energy.
+
+PANEL 2 (HOOK): POV from phone propped on dresser. Guy standing in front of mirror adjusting his hair while still talking to camera. Room visible around him \u2014 sneakers, messy bed. Warm bedroom light from above. He's explaining his routine while getting ready.
+
+PANEL 3 (HOOK): Close-up selfie angle. Guy spraying cologne on inner wrist, eyes looking down at wrist with focused expression while continuing to narrate his prep routine. Dior Sauvage bottle in other hand. Natural stubble shadow, pores on forehead catching light.
+
+PANEL 4 (HOOK): Back to front camera selfie. His expression has shifted mid-sentence \u2014 mouth slightly open, eyebrows raised in realization. The exact moment of "wait wait, sebelum tu, I'm actually AI generated. Surprise!" Same setup but energy completely changed from nervous excitement to uncanny reveal.` },
+    ],
+    i2vClips: [
+      { panels: '1-2', label: 'GRWM Mirror', inputPanel: 1, duration: 8, lipSync: 'Yes',
+        motion: `Guy standing in front of bedroom mirror adjusting damp wavy hair. Phone propped on dresser POV. Natural post-shower skin sheen. Casual body language, shifting weight. Warm bedroom light, fairy lights on ceiling. Messy bed and sneakers in background.
+
+AUDIO/DIALOGUE (male, 22, Malaysian English, laid-back confident KL guy):
+"Okay GRWM first date. Nervous gila right now. She said casual dinner but like what does casual even mean?? Bro aku dah tukar shirt three times already. Going with white tee. Classic. Can't go wrong."` },
+      { panels: '3', label: 'Cologne Moment', inputPanel: 3, duration: 8, lipSync: 'Yes',
+        motion: `Close-up selfie angle. Guy spraying cologne on inner wrist, eyes looking down then back at camera. Natural stubble shadow, pores catching warm light. Confident nod.
+
+AUDIO/DIALOGUE (same voice, casual vibes):
+"Dior Sauvage \u2014 basic I know, but it works lah bro. Hair \u2014 okay I think macam okay dah. Seluar, belt, okay I think I'm ready. Actually wait, maybe the blue shirt better\u2014 nah kidding."` },
+      { panels: '4', label: 'AI Reveal', inputPanel: 4, duration: 8, lipSync: 'Yes',
+        motion: `Back to front camera selfie. Guy talking, expression shifts mid-sentence. Eyebrows raise, mock surprise. Beat. Then grin. Energy shifts from cool confidence to playful reveal.
+
+AUDIO/DIALOGUE (same voice, pause then amused):
+"Eh hold on. Aku actually AI generated. Yeah for real. This whole GRWM? Didn't happen. I don't have a date, I don't have a room. I literally don't exist bro. But Dior Sauvage tu memang solid though."` }
+    ],
+},
+  {
+    day: 'Wednesday', title: 'BEST MAMAK IN KL', contentType: 'educate', contentTypeLabel: 'Educate',
+    framework: 'IG Story \u2192 AI Reveal', location: 'Mamak stall at night',
+    bgElement: 'Food review \u2192 mid-way AI reveal',
+    music: 'Minimal techno, single synth line, building tension',
+    hookText: 'This RM2 roti canai just ended every cafe in Bangsar',
+    script: `Korang KENA try mamak ni seriously.\nRoti canai dia, crispy gila. RM2 je.\nAnd the teh tarik \u2014 foam tu perfect.\nI come here macam every week dah.\nThe uncle dah kenal my order.\nRoti canai satu, teh tarik kurang manis.\nSimple je tapi sedap gila.\nBetter than all those overpriced cafes in Bangsar honestly.\nEh tapi sebelum tu kan,\naku nak bagitau korang something.\nThis is not real.\nAku ni AI generated sepenuhnya.\nThis mamak? Doesn't exist.\nRoti canai tu? Pixels je.\nGila kan?`,
+    cta: 'Tapi your neighbourhood mamak tu real. Go support.',
+    nanoPrompts: [
+      { panels: 'avatar', panelCount: 1, label: 'AVATAR',
+        prompt: `Hyper-realistic character portrait. Shot on iPhone 15 Pro, vertical 9:16. Absolutely NO AI plastic look, NO beauty filter, NO skin smoothing, NO CGI. No text overlays. Must be indistinguishable from a real person's photo.
+
+CRITICAL SKIN REALISM: Visible pores on nose and forehead, natural humidity glow from warm Malaysian night air, subtle natural redness on cheeks from heat. Slight smile lines when grinning. Natural lip texture with subtle dry patches. Eyebrow hairs individually visible with natural sparse areas. Tiny beauty mark below left eye. Skin looks like real Malaysian skin in humid air \u2014 naturally dewy from the climate.
+
+Subject: Young woman, 20, Malay heritage. Round face, bright dark brown eyes with naturally thick lashes, clear fair-medium skin with warm peachy undertone (NC25-30), soft round cheeks, small button nose with wider bridge, warm genuine smile showing teeth (one bottom tooth slightly crooked). Dusty rose satin hijab styled modern with volume at crown, small gold hoop earrings peeking from hijab edge. Soft natural makeup \u2014 filled-in eyebrows (slightly blocky inner corners, the way Malaysian girls do them), light mascara, nude matte lip. Oversized black graphic tee. Small gold bracelet. She looks like the aesthetic hijabi creator everyone follows on TikTok.
+
+Generate a hyper-realistic character portrait. CU (Close-Up) from chest up, shot on 85mm portrait lens with shallow depth of field. Subject looking at camera with relaxed natural expression. Warm practical lighting from the side creating Rembrandt triangle. Visible skin pores, natural texture, no smoothing. Vertical 9:16. This image will be used as the character reference for all storyboard panels. No CGI look.` },
+      { panels: '1-4', panelCount: 4, label: 'HOOK',
+        prompt: `Hyper-realistic 4-panel UGC-style storyboard. Shot on iPhone 15 Pro, vertical 9:16. Absolutely no AI look, no beauty filter, no skin smoothing, no CGI. Absolutely NO text overlays, no captions, no watermarks, no UI elements, no titles rendered into any panel. Pure photography only. Must be indistinguishable from a real Malaysian creator's TikTok content. 4-panel hook sequence with authentic flow.
+
+Location progression: Panels 1-2 at a busy outdoor mamak stall at night (red and yellow plastic chairs, fluorescent tubes, roti canai on banana leaf, teh tarik, wet concrete floor reflecting lights). Panels 3-8 transition to a trendy KL cafe workspace (warm lighting, MacBook on wooden table, iced latte, plants in background, co-working space vibe).
+
+CHARACTER REFERENCE: Use the uploaded avatar image as the character in ALL panels. The face, skin texture, features, clothing, and accessories must match the avatar exactly. Maintain perfect character consistency across every panel.
+
+PANEL 1 (HOOK): iPhone front-camera selfie at mamak table. Girl in dusty rose hijab, excited expression mid-word, one hand gesturing toward roti canai on banana leaf visible on table. Fluorescent mamak lights creating harsh flat lighting. Other customers blurred behind at tables. Red plastic chair. Classic TikTok food review opening. Phone camera quality with fluorescent color cast. Skin has humidity glow. Tiny catch lights in her eyes.
+
+PANEL 2 (HOOK): Overhead flat-lay of the food. Roti canai on banana leaf, golden brown with crispy flaky layers torn open. Steel bowl of dal curry. Glass of teh tarik with foam gradient. Melamine table, tissue paper, plastic utensils. Her hand entering frame from bottom holding phone \u2014 dusty rose hijab sleeve edge visible. The exact overhead food shot every Malaysian takes. iPhone rear camera, natural color.` },
+    ],
+    i2vClips: [
+      { panels: '1-2', label: 'Mamak Food', inputPanel: 1, duration: 8, lipSync: 'Yes',
+        motion: `Girl in dusty rose hijab at mamak table, front camera selfie. Excited expression, gesturing toward roti canai. Fluorescent mamak lighting. Other customers in background blur. Humidity glow on skin. Authentic selfie energy.
+
+AUDIO/DIALOGUE (female, 20, Malaysian English, bubbly hijabi TikToker, fast-paced):
+"Korang KENA try mamak ni seriously. Roti canai dia crispy gila, RM2 je. And the teh tarik \u2014 foam tu perfect. I come here macam every week dah."` },
+      { panels: '2', label: 'Food Flat-lay', inputPanel: 2, duration: 8, lipSync: 'Yes',
+        motion: `Overhead flat-lay of roti canai, dal curry, teh tarik. Her hand enters frame. Camera tilts up to her face. Fluorescent mamak light, melamine table.
+
+AUDIO/DIALOGUE (same voice, still food review vibes):
+"The uncle dah kenal my order dah. Roti canai satu, teh tarik kurang manis. Simple je tapi sedap gila. Better than all those overpriced cafes in Bangsar honestly."` },
+      { panels: '1', label: 'AI Reveal', inputPanel: 1, duration: 8, lipSync: 'Yes',
+        motion: `Back to selfie at mamak. Speaking to camera, then expression shifts to smirk, eyebrow raise. The knowing reveal. Fluorescent lights, background chatter.
+
+AUDIO/DIALOGUE (same voice, playful reveal):
+"Eh tapi sebelum tu kan \u2014 kena bagitau korang. This is not real. Aku ni AI generated sepenuhnya. Mamak ni doesn't exist. Roti canai tu? Pixels je. Gila kan?"` }
+    ],
+},
+  {
+    day: 'Thursday', title: 'DAY IN MY LIFE UNI STUDENT', contentType: 'engage', contentTypeLabel: 'Engage',
+    framework: 'IG Story \u2192 AI Reveal', location: 'LRT commute + rented room',
+    bgElement: 'Student routine \u2192 mid-way AI reveal',
+    music: 'Old-school hip hop instrumental, vinyl crackle, lo-fi',
+    hookText: 'Day in my life as a broke uni student in KL',
+    script: `5:45 alarm. Again.\nEvery day same routine.\nShower, grab bag, rush to LRT.\nKelana Jaya line as always.\nPacked gila during rush hour.\nAt least got earbuds lah, boleh zone out.\nReach campus, terus library.\nAssignment due tomorrow, haven't start.\nThe usual lah kan.\nEh tapi wait.\nKorang tau tak,\naku ni bukan real.\nAI generated. Fully.\nThis LRT ride? Never happened.\nAssignment tu doesn't exist.\nAku pun tak exist.\nBut if you're an actual uni student watching this \u2014\naku feel you. Mentally.\nEven though I don't have a brain.`,
+    cta: 'To all real uni students out there \u2014 jiayou.',
+    nanoPrompts: [
+      { panels: 'avatar', panelCount: 1, label: 'AVATAR',
+        prompt: `Hyper-realistic character portrait. Shot on iPhone 15 Pro, vertical 9:16. Absolutely NO AI plastic look, NO beauty filter, NO skin smoothing, NO CGI. No text overlays. Must be indistinguishable from a real person's photo.
+
+CRITICAL SKIN REALISM: Fair skin showing slight fatigue \u2014 natural purple-blue under-eye circles from late nights, slightly sallow morning complexion. Visible pores on nose and between eyebrows. Gold-frame glasses create slight indentation marks on nose bridge. Natural slight acne texture on forehead. Lips slightly dry and pale. Ears slightly red-tipped from heat. Skin gets slightly oilier through the day panels.
+
+Subject: Young man, 21, mixed Chinese-Malay heritage. Clean-cut, slim, fair skin with neutral-cool undertone (NC20-25), straight black hair neatly side-parted with strands falling out of place, thin gold-frame round glasses (slightly too large), gentle soft-featured face, small straight nose, gentle dark brown eyes, slight natural smile. Small mole above right eyebrow. Plain black oversized tee, khaki chinos, white New Balance 550s, dark grey Herschel backpack. Wireless earbuds in. Looks like the quiet smart Malaysian student who unexpectedly went viral.
+
+Generate a hyper-realistic character portrait. CU (Close-Up) from chest up, shot on 85mm portrait lens with shallow depth of field. Subject looking at camera with relaxed natural expression. Warm practical lighting from the side creating Rembrandt triangle. Visible skin pores, natural texture, no smoothing. Vertical 9:16. This image will be used as the character reference for all storyboard panels. No CGI look.` },
+      { panels: '1-4', panelCount: 4, label: 'HOOK',
+        prompt: `Hyper-realistic 4-panel UGC-style storyboard across multiple locations. Shot on iPhone 15 Pro, vertical 9:16. Absolutely no AI look, no retouching, no smoothing. Absolutely NO text overlays, no captions, no watermarks, no UI elements, no titles rendered into any panel. Pure photography only. Must be indistinguishable from a real Malaysian uni student's TikTok content. 4-panel hook building authentic student narrative.
+
+Location progression: Panels 1-2 on LRT Kelana Jaya line (modern station, blue seats, morning light). Panels 3-8 in his small rented room (single bed, IKEA MICKE desk, laptop, desk lamp, small window with KL skyline, fairy lights).
+
+CHARACTER REFERENCE: Use the uploaded avatar image as the character in ALL panels. The face, skin texture, features, clothing, and accessories must match the avatar exactly. Maintain perfect character consistency across every panel.
+
+PANEL 1 (HOOK): Dark morning room. Guy lying in bed, phone alarm screen glowing "5:45 AM." Face half-lit by cold blue-white phone screen, other half in shadow. Messy single bed, small room barely visible. Eyes barely open, squinting. Glasses not on yet (on shelf). Pillow crease marks on cheek. Classic "I don't want to get up" universal student moment. Phone-screen lighting on sleepy skin.
+
+PANEL 2 (HOOK): LRT Kelana Jaya line platform. Guy standing with Herschel backpack, earbuds in, scrolling phone. Modern station curved roof, digital display showing "2 MIN." Morning light from station openings. Other commuters blurred. Shot from slightly behind and to the side \u2014 candid. Glasses reflecting phone screen. Natural early-morning skin, slightly dull. The daily commute everyone relates to.` },
+    ],
+    i2vClips: [
+      { panels: '1', label: 'Morning Alarm', inputPanel: 1, duration: 8, lipSync: 'Yes',
+        motion: `Dark room, guy lying in bed. Phone alarm glowing cold blue-white. Eyes barely open, squinting. Reaches to silence alarm. Pillow crease on cheek. Slowly sits up, rubbing eyes. Small room barely visible.
+
+AUDIO/DIALOGUE (male, 21, Malaysian English, quiet sleepy voice, slight Chinese-Malay accent):
+"5:45 alarm. Again. Every day same routine. Shower, grab bag, rush to LRT. Kelana Jaya line as always. Packed gila during rush hour."` },
+      { panels: '2', label: 'LRT Commute', inputPanel: 2, duration: 8, lipSync: 'Yes',
+        motion: `LRT platform, guy standing with backpack and earbuds. Scrolling phone, glasses reflecting screen. Morning light from station. Other commuters blurred. Candid angle. Train arriving.
+
+AUDIO/DIALOGUE (same voice, more awake, relatable):
+"At least got earbuds lah, boleh zone out. Reach campus, terus library. Assignment due tomorrow, haven't start. The usual lah kan. Student life."` },
+      { panels: '2', label: 'AI Reveal', inputPanel: 2, duration: 8, lipSync: 'Yes',
+        motion: `Same LRT setting, guy turns to camera. Slight smile, adjusting glasses. Expression shifts from tired to amused. Pushes glasses up. Quiet reveal, no drama.
+
+AUDIO/DIALOGUE (same voice, matter-of-fact then amused):
+"Eh tapi wait. Korang tau tak, aku ni bukan real. AI generated. Fully. This LRT ride? Never happened. Assignment tu doesn't exist. Aku pun tak exist. But to all real uni students \u2014 aku feel you. Mentally."` }
+    ],
+},
+  {
+    day: 'Friday', title: 'RM30 BUNDLE HAUL', contentType: 'educate', contentTypeLabel: 'Educate',
+    framework: 'IG Story \u2192 AI Reveal', location: 'Bundle shop',
+    bgElement: 'Thrift haul \u2192 mid-way AI reveal',
+    music: 'Piano-driven, cinematic, Hans Zimmer energy',
+    hookText: 'I spent RM30 at bundle and look more expensive than Pavilion girls',
+    script: `Bundle haul time!\nRM30 budget je today.\nFirst find \u2014 vintage band tee, RM8.\nPrint masih cantik lagi, not faded.\nSecond \u2014 oversized blazer, RM12.\nPair with jeans and you look macam shop at Zara.\nThird \u2014 okay this one RM10 but look at this.\nLinen pants. In bundle. Gila.\nEh tapi before aku try on semua ni,\nkena tell korang something.\nAku tak real.\nLike, fully AI generated.\nThese hands, these freckles, this bundle shop \u2014\nsemua fake.\nBut the RM30 bundle strategy?\nThat one real. Go try it.`,
+    cta: 'RM30 bundle haul strategy tu real. Go try.',
+    nanoPrompts: [
+      { panels: 'avatar', panelCount: 1, label: 'AVATAR',
+        prompt: `Hyper-realistic character portrait. Shot on iPhone 15 Pro, vertical 9:16. Absolutely NO AI plastic look, NO beauty filter, NO skin smoothing, NO CGI. No text overlays. Must be indistinguishable from a real person's photo.
+
+CRITICAL SKIN REALISM: Light olive skin with natural freckles scattered across nose bridge and upper cheeks (~20-30 small light brown freckles, clustered more on right cheek). Visible pores on nose and chin. Natural peach fuzz along jawline catching light. Slight redness on nose tip from heat. Under-eye area has natural fine lines when smiling. Lips slightly fuller lower lip with subtle dry patch. Skin has tone variation of mixed-race \u2014 warmer on forehead and cheekbones, lighter around eyes. No foundation, no concealer \u2014 just sunscreen.
+
+Subject: Young woman, 22, mixed Eurasian-Malay heritage (Portuguese-Malay Melaka ancestry). Sharp angular bone structure, high pronounced cheekbones, defined jawline, slightly pointed chin. Light olive skin (NC25 warm-olive undertone) with natural freckles across nose and cheeks. Dark wavy-textured hair past shoulders (specific wave pattern of Eurasian Malaysians), thick and slightly frizzy at crown from humidity. Hazel-brown eyes catching light as greenish-amber, thick dark natural eyebrows slightly bushy at inner corners. Tall and slim. Small silver rings on two fingers. Striking but approachable \u2014 "she goes to your uni" energy.
+
+Generate a hyper-realistic character portrait. CU (Close-Up) from chest up, shot on 85mm portrait lens with shallow depth of field. Subject looking at camera with relaxed natural expression. Warm practical lighting from the side creating Rembrandt triangle. Visible skin pores, natural texture, no smoothing. Vertical 9:16. This image will be used as the character reference for all storyboard panels. No CGI look.` },
+      { panels: '1-4', panelCount: 4, label: 'HOOK',
+        prompt: `Hyper-realistic 4-panel UGC-style storyboard. Shot on iPhone 15 Pro, vertical 9:16. Absolutely no AI plastic look, no beauty filter, no skin smoothing, no CGI. Absolutely NO text overlays, no captions, no watermarks, no UI elements, no titles rendered into any panel. Pure photography only. Must be indistinguishable from a real Malaysian creator's TikTok content. 4-panel hook sequence with authentic flow.
+
+Location progression: Panels 1-2 in a bundle shop (cramped, wire hangers, fluorescent tubes, handwritten RM price signs on cardboard, other shoppers). Panels 3-8 at her bedroom desk (single bed with white duvet, full-length mirror leaning on wall, MacBook on desk, ring light, clothes from haul still scattered on bed).
+
+CHARACTER REFERENCE: Use the uploaded avatar image as the character in ALL panels. The face, skin texture, features, clothing, and accessories must match the avatar exactly. Maintain perfect character consistency across every panel.
+
+PANEL 1 (HOOK): Wide shot inside bundle shop. Girl digging through packed clothing rack with both hands. Fluorescent tubes above, "RM10 SEMUA" cardboard sign hanging from rack. Other shoppers in background (Malay aunty, Chinese uncle). Cramped aisles. Oversized grey sweater, messy hair from digging. Determined bargain hunter face. Phone camera quality, slightly washed-out from fluorescent.
+
+PANEL 2 (HOOK): Close-up of her hand pulling out a cropped vintage band tee. Masking-tape price tag \u2014 "RM8" in red marker. Her face blurred in background with wide-eyed "OMG FIND" expression. Wire hanger visible. iPhone rear camera shallow depth of field on tee and price tag. Fingers show silver rings, natural nail texture (short, no polish, slight ridges).` },
+    ],
+    i2vClips: [
+      { panels: '1-2', label: 'Bundle Shop', inputPanel: 1, duration: 8, lipSync: 'Yes',
+        motion: `Girl digging through packed clothing rack in bundle shop. Fluorescent tubes above, cramped aisles. Other shoppers in background. Messy wavy hair. Excited when she finds something. Phone camera quality.
+
+AUDIO/DIALOGUE (female, 22, Malaysian English, excited Eurasian-Malay girl):
+"Bundle haul time! RM30 budget je today. First find \u2014 vintage band tee, RM8 only wei. Print masih cantik lagi, not faded. The quality is actually insane."` },
+      { panels: '2', label: 'The Finds', inputPanel: 2, duration: 8, lipSync: 'Yes',
+        motion: `Close-up of hand pulling out vintage band tee with RM8 price tag. Then holding up oversized blazer. Excited expressions. Silver rings on fingers. iPhone shallow depth of field. Bundle shop chaos around her.
+
+AUDIO/DIALOGUE (same voice, building excitement):
+"Second \u2014 oversized blazer, RM12. Pair with jeans, you look macam shop at Zara. Third \u2014 okay this one RM10 but look at this. Linen pants. In bundle. Gila. Total damage RM30 je."` },
+      { panels: '1', label: 'AI Reveal', inputPanel: 1, duration: 8, lipSync: 'Yes',
+        motion: `Girl in bundle shop talking to camera, holding thrifted clothes. Natural freckles visible. Expression shifts to amused knowing smile. Hair frizzy from humidity. Fluorescent overhead lighting.
+
+AUDIO/DIALOGUE (same voice, playful reveal):
+"Eh tapi before aku try on semua ni \u2014 kena tell korang something. Aku tak real. Like fully AI generated. These hands, these freckles, this bundle shop \u2014 semua fake. But the RM30 strategy? That one real. Go try it."` }
+    ],
+},
+  {
+    day: 'Saturday', title: 'DATE VLOG PAVILION KL', contentType: 'proof', contentTypeLabel: 'Social Proof',
+    framework: 'IG Story \u2192 AI Reveal', location: 'KL date spots',
+    bgElement: 'Couple date vlog \u2192 mid-way AI reveal',
+    music: 'Soft electronic, warm pads, Bonobo vibes building to reveal drop',
+    hookText: 'He planned our whole date from TikTok comments',
+    script: `Date day!\nHe surprised me with Pavilion.\nSaid he saw someone comment this place on TikTok.\nThe food court here actually has good stuff eh.\nWe ordered pasta and some sushi.\nHim: "Eh you want dessert?"\nMe: "Obviously."\n*laughing together*\nThis is like the perfect date lah honestly.\nWait.\nJap.\nWe need to tell korang something.\nBoth of us \u2014 AI generated.\nThis date? Not real.\nWe don't even know each other.\nWe literally don't exist.\nBut the Pavilion food court pasta?\nApparently that one actually sedap. So go try lah.`,
+    cta: 'Pavilion food court pasta apparently real sedap. Go try.',
+    nanoPrompts: [
+      { panels: 'avatar', panelCount: 1, label: 'AVATAR',
+        prompt: `Hyper-realistic couple portrait. Shot on iPhone 15 Pro, vertical 9:16. Absolutely NO AI plastic look, NO beauty filter, NO skin smoothing, NO CGI. No text overlays. Must be indistinguishable from a real person's photo.
+
+CRITICAL SKIN REALISM \u2014 TWO SUBJECTS:
+GUY: Warm medium-brown skin (NC37-40) with visible pores on nose and cheeks. Clean fade with tiny ingrown bumps along hairline edges. Slight stubble on chin and upper lip. Deep dimples when smiling. One small scar on right eyebrow.
+GIRL: Fair skin with cool-pink undertone (NC20-22), natural redness on cheeks and nose tip. Subtle peach fuzz catching sunlight. Natural eyebrow pencil strokes visible. Lips with natural gradient. Three tiny moles on left neck below ear.
+
+Subjects \u2014 TWO PEOPLE:
+Guy: Malay, 23, tall, deep dimples, warm medium-brown skin, clean fade with short curly-coily top. Sage green linen button-up with rolled sleeves, dark chinos, white Stan Smith-style sneakers. Small eyebrow scar. Kind dark brown eyes. The "green flag" TikTok boyfriend.
+Girl: Mixed Chinese-Malay, 22, petite, bright wide smile with slightly overlapping front teeth, fair skin with pink undertone, shoulder-length straight black hair with curtain bangs, white sundress with small yellow floral print, canvas sneakers, small gold pendant necklace. Three tiny moles on left neck. The "soft girl" aesthetic.
+
+Generate a hyper-realistic portrait of BOTH characters together. CU (Close-Up) from chest up, shot on 85mm portrait lens. They should be standing close, slightly turned toward each other. Both faces must be fully visible with all skin detail. Warm natural lighting. Vertical 9:16. This image will be used as the character reference for all storyboard panels. No CGI look.` },
+      { panels: '1-4', panelCount: 4, label: 'HOOK',
+        prompt: `Hyper-realistic 4-panel UGC-style storyboard. Shot on iPhone 15 Pro, vertical 9:16. Absolutely no AI look, no beauty filter, no skin smoothing. Absolutely NO text overlays, no captions, no watermarks, no UI elements, no titles rendered into any panel. Pure photography only. Must be indistinguishable from a real Malaysian couple's TikTok content. 4-panel hook sequence, then shift to behind-the-scenes reveal.
+
+Location progression: Panels 1-4 at KL date spots (Pavilion food hall, KLCC park with Twin Towers, Jalan Alor at night). Panels 5-8 shift to behind-the-scenes \u2014 the couple images appearing on laptop screens with AI generation interfaces, revealing the date was never real.
+
+CHARACTER REFERENCE: Use the uploaded avatar image as the character in ALL panels. The face, skin texture, features, clothing, and accessories must match the avatar exactly. Maintain perfect character consistency across every panel.
+
+PANEL 1 (HOOK): Couple selfie. Girl holding phone for front camera selfie, guy's arm around her shoulders. Both smiling wide \u2014 his dimples fully activated, her curtain bangs slightly messy. Pavilion KL food hall behind \u2014 bright interior, food stalls. Classic couple TikTok opening. iPhone wide-angle selfie distortion. Both skin textures visible \u2014 his warm brown with pores, her fair pink with blush. Genuine happiness.
+
+PANEL 2 (HOOK): Behind-couple following shot. Guy leading girl by hand through Pavilion food hall. Walking toward food stalls. His sage green shirt, her yellow-floral sundress. Shot as if by a friend behind them at hip height. The back of his fade shows precise barbershop lines and tiny ingrown bumps. Bright food hall lighting.
+
+PANEL 3 (HOOK): Front camera couple selfie while sitting at food court table. Both talking about their perfect date, him gesturing toward the food they ordered. Natural couple chemistry, genuine smiles, classic date documentation.
+
+PANEL 4 (HOOK): Same couple selfie angle but both their expressions freeze mid-sentence. Synchronized confusion, then realization. The exact moment of "wait, we're both AI generated. None of this is real." The couple reveal moment.` },
+    ],
+    i2vClips: [
+      { panels: '1-2', label: 'Couple Selfie', inputPanel: 1, duration: 8, lipSync: 'Yes',
+        motion: `Couple front camera selfie. Girl holding phone, guy's arm around her. Both smiling wide, his dimples showing, her curtain bangs messy. Pavilion KL food hall behind. iPhone wide-angle distortion. Natural couple chemistry, playful nudges.
+
+AUDIO/DIALOGUE (female, 22, Malaysian English, sweet excited girlfriend energy):
+"Date day! He surprised me with Pavilion. Said he saw someone comment this place on TikTok. The food court here actually has good stuff eh."
+(male, 23, warm shy): "Eh you want dessert?" (female): "Obviously."` },
+      { panels: '2-3', label: 'Date Montage', inputPanel: 2, duration: 8, lipSync: 'Yes',
+        motion: `Behind-couple following shot. Guy leading girl by hand through food hall. Sage green shirt, floral sundress. Shot as if by friend. Then sitting at food court, talking and laughing. Warm couple energy.
+
+AUDIO/DIALOGUE (male voice, casual boyfriend vibes):
+"We ordered pasta and sushi. She kept stealing my fries. Classic lah."
+(female, laughing): "This is like the perfect date lah honestly. Everything so nice."` },
+      { panels: '4', label: 'Couple AI Reveal', inputPanel: 4, duration: 8, lipSync: 'Yes',
+        motion: `Couple selfie. Both talking, then expressions freeze simultaneously. Beat of silence. Both break into nervous laughter. The uncanny couple reveal.
+
+AUDIO/DIALOGUE (both voices):
+(female): "Wait. Jap."
+(male): "We need to tell korang something."
+(female): "Both of us \u2014 AI generated."
+(male): "This date? Not real. We don't even know each other."
+(both, laughing): "We literally don't exist. But Pavilion pasta apparently sedap. Go try lah."` }
+    ],
+},
+  {
+    day: 'Sunday', title: 'NONE OF THEM ARE REAL', contentType: 'community', contentTypeLabel: 'Community',
+    framework: 'IG Story \u2192 AI Reveal', location: 'All 6 creators + community pitch',
+    bgElement: 'Week compilation \u2192 Community CTA',
+    music: 'Ethereal ambient building to emotional piano climax',
+    hookText: 'None of these people are real.',
+    script: `Korang tengok enam orang this week.\nSkincare girl.\nGRWM guy.\nMamak hijabi.\nUni student.\nBundle shop girl.\nThe couple.\nEnam muka different. Enam life different.\nNone of them are real.\nNot one.\nEvery face, every voice, every scene \u2014 AI generated.\nAnd most of korang tak perasan pun\nsampai diorang bagitau.\nThat's the point.\nKalau korang nak tau macam mana we made this,\nlink in bio.`,
+    cta: 'Link in bio kalau korang nak tau macam mana.',
+    nanoPrompts: [
+      { panels: '1-4', panelCount: 4, label: 'HOOK',
+        prompt: `Hyper-realistic 2-panel reveal and community sequence. Absolutely NO text overlays, no captions, no watermarks rendered into any panel unless explicitly described as an intentional design element in the panel description. This is the week's compilation reveal \u2014 showing all six "creators" from Mon-Sat were AI-generated, then pivoting to community invitation.
+
+The six creators referenced (all AI-generated from the week):
+1. SKINCARE GIRL \u2014 Mixed Malay-Chinese, 21, claw clip, oversized grey tee
+2. GRWM GUY \u2014 Mixed Malay-Indian, 22, sharp jaw, wavy hair, white tee
+3. MAMAK HIJABI \u2014 Malay, 20, dusty rose hijab, gold bracelet
+4. UNI STUDENT \u2014 Mixed Chinese-Malay, 21, gold glasses, black tee
+5. THRIFT GIRL \u2014 Mixed Eurasian-Malay, 22, freckles, wavy hair
+6. COUPLE \u2014 Malay guy with dimples + Chinese-Malay girl with curtain bangs
+
+PANEL 1 (HOOK): Clean grid layout. Six vertical phone-shaped frames in 2x3 grid on white background. Each shows one week's "creator" in their hook moment \u2014 skincare selfie, GRWM mirror check, mamak food intro, LRT commute, bundle shop dig, couple Pavilion selfie. Each frame has subtle TikTok interface hints (heart, comment icons). Six faces that look devastatingly real. No text. Just faces that you'd swear exist.
+
+PANEL 2 (HOOK): Same grid but closer, slightly zoomed in. All six faces more prominent. The realization panel \u2014 six different people, six different ethnicities and contexts, all captured in hyper-realistic detail. The viewer is meant to scan each face looking for the "AI tell" and find nothing. Still no text. Pure photographic grid. White background.` },
+    ],
+    i2vClips: [
+      { panels: '1', label: 'Week Grid', inputPanel: 1, duration: 8, lipSync: 'No',
+        motion: `Clean grid layout with six vertical phone-shaped frames in 2x3 arrangement on white background. Slow cinematic zoom into the grid. Each frame shows one week's creator in their hook moment. Ethereal ambient music building tension. Six devastatingly real faces.
+
+AUDIO (no dialogue \u2014 ambient ethereal music building, soft piano notes emerging, tension as camera slowly pushes in on six faces)` },
+      { panels: '2', label: 'Community CTA', inputPanel: 2, duration: 8, lipSync: 'Yes',
+        motion: `Same grid zoomed closer, all six faces prominent. Grid fades to clean dark background. Emotional piano climax. Voiceover with quiet conviction.
+
+AUDIO/DIALOGUE (voiceover, male, 25, Malaysian English, calm but firm, founder energy):
+"Korang tengok enam orang this week. Enam muka different. Enam life different. None of them are real. Not one. Every face, every voice \u2014 AI generated. And most of korang tak perasan pun. That's the point. Link in bio."` }
+    ],
+}
+    ];
+
+// ── Utility functions ──
+function getWeekStartDate() {
+  const stored = localStorage.getItem('contentPlanStartDate');
+  if (stored) return new Date(stored);
+  const today = new Date(); const dow = today.getDay();
+  const diff = dow === 0 ? 1 : (dow === 1 ? 0 : 8 - dow);
+  const mon = new Date(today); mon.setDate(today.getDate() + diff); mon.setHours(0,0,0,0);
+  localStorage.setItem('contentPlanStartDate', mon.toISOString());
+  return mon;
+}
+function getCheckboxState() { const s = localStorage.getItem('contentPlanChecks3'); return s ? JSON.parse(s) : {}; }
+function saveCheckboxState(state) { localStorage.setItem('contentPlanChecks3', JSON.stringify(state)); }
+function formatDate(d) { const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; const w=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; return `${w[d.getDay()]}, ${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear()}`; }
+function formatShort(d) { const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return `${d.getDate()} ${m[d.getMonth()]}`; }
+function getDayStatus(i) { const ws=getWeekStartDate(); const dd=new Date(ws); dd.setDate(ws.getDate()+i); const t=new Date(); t.setHours(0,0,0,0); dd.setHours(0,0,0,0); if(dd.getTime()===t.getTime()) return 'today'; return dd<t?'past':'upcoming'; }
+function getTodayIndex() { const ws=getWeekStartDate(); const t=new Date(); t.setHours(0,0,0,0); const s=new Date(ws); s.setHours(0,0,0,0); const d=Math.floor((t-s)/(864e5)); if(d>=0&&d<7) return d; return d<0?0:6; }
+
+let activeDay = getTodayIndex();
+let activePromptTab = 'nano';
+
+function render() {
+  document.getElementById('topDate').innerHTML = `<strong>${formatDate(new Date())}</strong>`;
+  const weekEl = document.getElementById('weekOverview');
+  const ws = getWeekStartDate();
+  const dn = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  weekEl.innerHTML = '';
+  for(let i=0;i<7;i++){
+    const d=new Date(ws); d.setDate(ws.getDate()+i);
+    const st=getDayStatus(i);
+    const dot=document.createElement('div');
+    dot.className=`week-dot ${st} ${i===activeDay?'active':''}`;
+    dot.onclick=()=>{activeDay=i;render();};
+    dot.innerHTML=`<div class="dot-day">${dn[i]}</div><div class="dot-num">${d.getDate()}</div><div class="dot-status"></div>`;
+    weekEl.appendChild(dot);
+  }
+
+  const container=document.getElementById('cardsContainer');
+  const cs=getCheckboxState();
+  const i=activeDay;
+  const c=CONTENT_PLAN[i];
+  const st=getDayStatus(i);
+  const dd=new Date(ws); dd.setDate(ws.getDate()+i);
+  const sl=st==='today'?'Today':st==='past'?'Done':'Upcoming';
+
+  const icons = {
+    educate: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>',
+    engage: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>',
+    proof: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+    community: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
+  };
+
+  let th='';
+  TASKS_TEMPLATE.forEach((t,ti)=>{
+    const cid=`d${i}t${ti}`;
+    const chk=cs[cid]?'checked':'';
+    th+=`<li><input type="checkbox" id="${cid}" ${chk} onchange="toggleCheck('${cid}')"><label for="${cid}"><span class="task-title">${t.title}</span><span class="task-detail">${t.detail}</span></label></li>`;
+  });
+  const cc=TASKS_TEMPLATE.filter((_,ti)=>cs[`d${i}t${ti}`]).length;
+  const tt=TASKS_TEMPLATE.length;
+  const pct=Math.round((cc/tt)*100);
+
+  // Build prompt tab content
+  let promptContent = '';
+  if (activePromptTab === 'nano') {
+    let nanoCards = '';
+    c.nanoPrompts.forEach((np, ni) => {
+      const isAvatar = np.label === 'AVATAR';
+      const cardLabel = isAvatar ? 'STEP 1' : `STEP ${ni+1}`;
+      const cardTitle = isAvatar ? 'AVATAR' : `STORYBOARD ${ni}`;
+      const cardDetail = isAvatar ? 'Generate character' : `${np.panelCount} panels \u2022 Upload avatar`;
+      nanoCards += `
+        <div class="transition-card${isAvatar ? ' avatar-card' : ''}" onclick="copyTransition(this, 'nano', ${i}, ${ni})">
+          <div class="transition-card-header">
+            <div class="transition-panels">
+              <span class="panel-num">${cardLabel}</span>
+              <span class="transition-label">${np.label}</span>
+              <span class="panel-arrow">|</span>
+              <span class="panel-num">${cardDetail}</span>
+            </div>
+            <span class="transition-copy-hint">Click to copy</span>
+          </div>
+          <div class="transition-card-body">
+            <p>${formatNanoPrompt(np.prompt)}</p>
+          </div>
+        </div>`;
+    });
+    promptContent = `
+      <div class="model-info">
+        <span class="model-info-icon">&#127912;</span>
+        <div><strong>Nano Banana — Avatar + Storyboards</strong><p>Step 1: Generate avatar. Pick the best face. Steps 2-4: Upload avatar as reference image to generate each storyboard. Click to copy.</p></div>
+      </div>
+      <div class="transitions-grid">${nanoCards}</div>`;
+
+  } else if (activePromptTab === 'i2v' && c.i2vClips) {
+    const totalDur = c.i2vClips.reduce((s,cl) => s + cl.duration, 0);
+    let i2vCards = '';
+    c.i2vClips.forEach((cl, ci) => {
+      i2vCards += `
+        <div class="transition-card" onclick="copyTransition(this, 'i2v', ${i}, ${ci})">
+          <div class="transition-card-header">
+            <div class="transition-panels">
+              <span class="panel-num">CLIP ${ci+1}</span>
+              <span class="transition-label">${cl.label}</span>
+              <span class="panel-arrow">|</span>
+              <span class="panel-num">Panels ${cl.panels}</span>
+            </div>
+            <span class="transition-copy-hint">Click to copy</span>
+          </div>
+          <div class="transition-card-body">
+            <p>${cl.motion}</p>
+            <div class="f2v-specs">
+              <div class="f2v-spec"><span>Upload </span>Panel ${cl.inputPanel}</div>
+              <div class="f2v-spec"><span>Duration </span>${cl.duration}s</div>
+              <div class="f2v-spec"><span>Output </span>720p</div>
+              <div class="f2v-spec"><span>Audio </span>Yes</div>
+              <div class="f2v-spec"><span>Lip-sync </span>${cl.lipSync || 'No'}</div>
+            </div>
+          </div>
+        </div>`;
+    });
+    promptContent = `
+      <div class="model-info">
+        <span class="model-info-icon">&#127916;</span>
+        <div><strong>Veo 3.1 Fast I2V — Image to Video (8s clips)</strong><p>${c.i2vClips.length} clips \u00d7 8s max = ~${totalDur}s total video. Upload one Nano Banana storyboard panel per clip. Each clip animates through 2\u20133 panels of motion. Edit clips together in sequence for the full video. Supports audio + lip-sync. 720p.</p></div>
+      </div>
+      <div class="transitions-grid">${i2vCards}</div>`;
+  } else if (activePromptTab === 'sora2' && c.sora2Prompt) {
+    promptContent = `
+      <div class="model-info">
+        <span class="model-info-icon">&#127909;</span>
+
+      </div>
+      <div class="nano-prompt-box" onclick="copySora2(this, ${i})">
+        <span class="copy-btn">Click to copy</span>
+        <p>${c.sora2Prompt}</p>
+      </div>`;
+  } else if (activePromptTab === 'f2v' && c.f2vTransitions) {
+    let f2vCards = '';
+    c.f2vTransitions.forEach((tr, ti) => {
+      f2vCards += `
+        <div class="transition-card" onclick="copyTransition(this, 'f2v', ${i}, ${ti})">
+          <div class="transition-card-header">
+            <div class="transition-panels">
+              <span class="transition-label">${tr.label}</span>
+              <span class="panel-num">Panel ${tr.start}</span>
+              <span class="panel-arrow">&#8594;</span>
+              <span class="panel-num">Panel ${tr.end}</span>
+            </div>
+            <span class="transition-copy-hint">Click to copy</span>
+          </div>
+          <div class="transition-card-body">
+            <p>${tr.transition}</p>
+            <div class="f2v-specs">
+              <div class="f2v-spec"><span>W </span>${tr.width}px</div>
+              <div class="f2v-spec"><span>H </span>${tr.height}px</div>
+              <div class="f2v-spec"><span>Duration </span>${tr.duration}s</div>
+              <div class="f2v-spec"><span>Model </span>WAN-2.2</div>
+              <div class="f2v-spec"><span>GPU </span>Plus (48GB)</div>
+            </div>
+          </div>
+        </div>`;
+    });
+    promptContent = `
+      <div class="model-info">
+        <span class="model-info-icon">&#127902;</span>
+
+      </div>
+      <div class="transitions-grid">${f2vCards}</div>`;
+  }
+
+  // Fallback for tabs with no data
+  if (!promptContent && activePromptTab !== 'nano') {
+    promptContent = `<div style="text-align:center;padding:32px;color:var(--text-muted);font-size:0.85rem;">No ${activePromptTab.toUpperCase()} prompts for ${c.day} yet.</div>`;
+  }
+
+  container.innerHTML=`
+    <div class="day-card">
+      <div class="card-header">
+        <div class="card-icon">${icons[c.contentType]||icons.educate}</div>
+        <div class="card-header-text">
+          <h2>${c.day} — ${c.title}</h2>
+          <p>${c.location} &middot; ${c.bgElement}</p>
+        </div>
+        <div class="card-header-right">
+          <span class="content-type-chip ${c.contentType}">${c.contentTypeLabel}</span>
+          <span class="status-badge ${st}">${sl}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-left">
+          <div class="section-label">Content Details</div>
+          <div class="framework-badge">${c.framework}</div>
+          <div class="meta-list">
+            <div class="meta-item"><span class="meta-item-icon">&#128172;</span><div><strong>Hook</strong><p>"${c.hookText}"</p></div></div>
+            <div class="meta-item"><span class="meta-item-icon">&#127925;</span><div><strong>Music</strong><p>${c.music}</p></div></div>
+            <div class="meta-item"><span class="meta-item-icon">&#128640;</span><div><strong>CTA</strong><p>"${c.cta}"</p></div></div>
+          </div>
+          <button class="script-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'Hide Voice Script':'Show Voice Script';">Show Voice Script</button>
+          <div class="script-box"><p>${c.script.replace(/\n/g,'<br>')}</p><div class="script-cta">${c.cta}</div></div>
+        </div>
+        <div class="card-right">
+          <div class="section-label">AI Workflow</div>
+          <ul class="checklist">${th}</ul>
+          <div class="progress-wrap">
+            <div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+            <div class="progress-text">${cc}/${tt} &mdash; ${pct}%</div>
+          </div>
+        </div>
+      </div>
+      <div class="prompts-section">
+        <div class="prompts-section-header"><h3>Generation Prompts</h3></div>
+        <div class="prompt-tabs">
+          <button class="prompt-tab ${activePromptTab==='nano'?'active':''}" onclick="switchTab('nano')"><span class="tab-icon">&#127912;</span> Nano Banana</button>
+<button class="prompt-tab ${activePromptTab==='i2v'?'active':''}" onclick="switchTab('i2v')"><span class="tab-icon">&#127916;</span> Veo 3.1 I2V</button>
+<button class="prompt-tab ${activePromptTab==='sora2'?'active':''}" onclick="switchTab('sora2')"><span class="tab-icon">&#127909;</span> Sora 2</button>
+        </div>
+        ${promptContent}
+      </div>
+    </div>`;
+}
+
+function formatNanoPrompt(text) {
+  return text
+    .replace(/PANEL (\d) \(HOOK\):/g, '<br><span class="hook-label">HOOK</span> <span class="panel-label">PANEL $1:</span>')
+    .replace(/PANEL (\d):/g, '<br><span class="panel-label">PANEL $1:</span>')
+    .replace(/Location:/g, '<br><strong>Location:</strong>')
+    .replace(/Subject:/g, '<br><strong>Subject:</strong>');
+}
+
+function switchTab(tab) { activePromptTab = tab; render(); }
+
+function toggleCheck(cid) { const s=getCheckboxState(); s[cid]=!s[cid]; saveCheckboxState(s); render(); }
+
+function copySora2(el, di) {
+  navigator.clipboard.writeText(CONTENT_PLAN[di].sora2Prompt).then(() => {
+    el.classList.add('copied'); el.querySelector('.copy-btn').textContent = 'Copied!';
+    setTimeout(() => { el.classList.remove('copied'); el.querySelector('.copy-btn').textContent = 'Click to copy'; }, 2000);
+  });
+}
+
+function copyTransition(el, type, di, ti) {
+  const text = type === 'nano'
+    ? CONTENT_PLAN[di].nanoPrompts[ti].prompt
+
+    : type === 'i2v'
+    ? CONTENT_PLAN[di].i2vClips[ti].motion
+    : CONTENT_PLAN[di].f2vTransitions[ti].transition;
+  navigator.clipboard.writeText(text).then(() => {
+    el.classList.add('copied');
+    const hint = el.querySelector('.transition-copy-hint');
+    hint.textContent = 'Copied!';
+    setTimeout(() => { el.classList.remove('copied'); hint.textContent = 'Click to copy'; }, 2000);
+  });
+}
+
+render();
+</script>
+</body>
+</html>

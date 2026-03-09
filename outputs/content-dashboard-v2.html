@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Dashboard V2 — Adletic Agency</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-dark: #08131f;
+    --bg-dark-2: #0d1f30;
+    --bg-grey: #F7F8FA;
+    --text-primary: #374151;
+    --text-muted: #6B7280;
+    --heading-dark: #0d1117;
+    --accent: #f26522;
+    --accent-hover: #d9541a;
+    --accent-light: rgba(242, 101, 34, 0.10);
+    --white: #FFFFFF;
+    --border-light: #E5E7EB;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+    --section-hook: #7c3aed;
+    --section-hook-light: rgba(124, 58, 237, 0.08);
+    --section-main: #f26522;
+    --section-main-light: rgba(242, 101, 34, 0.08);
+    --section-cta: #059669;
+    --section-cta-light: rgba(5, 150, 105, 0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-primary); color: var(--text-primary); line-height: 1.6;
+    -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg-grey); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+  /* ── Nav ── */
+  .nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.97); backdrop-filter: blur(20px); box-shadow: 0 1px 0 rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.06); }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; font-weight: 700; color: var(--heading-dark); flex-shrink: 0; }
+  .nav-logo { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 800; font-size: 0.85rem; }
+  .nav-date { font-size: 0.82rem; font-weight: 500; color: var(--text-muted); flex-shrink: 0; }
+  .nav-date strong { color: var(--heading-dark); }
+
+  /* ── Product Tabs in Nav ── */
+  .product-tabs { display: flex; background: var(--bg-grey); border: 1px solid var(--border-light); border-radius: 12px; padding: 3px; gap: 2px; }
+  .product-tab { padding: 8px 16px; border: none; border-radius: 10px; background: transparent; color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+  .product-tab.active { background: var(--accent); color: #fff; box-shadow: 0 2px 8px rgba(242,101,34,0.25); }
+  .product-tab:not(.active):hover { background: var(--white); color: var(--heading-dark); }
+  .product-tab .tab-emoji { font-size: 0.85rem; }
+
+  /* ── Hero ── */
+  .hero-header { background: var(--bg-dark); padding: 48px 0 56px; position: relative; overflow: hidden; }
+  .hero-header::before { content: ''; position: absolute; right: -80px; top: -80px; width: 300px; height: 300px; background: var(--accent); opacity: 0.06; border-radius: 50%; }
+  .hero-content { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; text-align: center; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.58); margin-bottom: 20px; }
+  .eyebrow-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulse-dot 2.5s ease-in-out infinite; }
+  @keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 0 rgba(242,101,34,0.7)}50%{box-shadow:0 0 0 8px rgba(242,101,34,0)} }
+  .hero-title { font-size: clamp(2rem,5vw,3rem); font-weight: 800; color: #fff; line-height: 1.12; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .hero-title-accent { color: var(--accent); }
+  .hero-subtitle { font-size: clamp(0.95rem,1.8vw,1.1rem); color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 620px; margin: 0 auto; font-weight: 400; }
+
+  /* ── Week Strip ── */
+  .week-section { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .week-strip { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin: -28px auto 32px; position: relative; z-index: 10; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 6px; backdrop-filter: blur(12px); max-width: 680px; }
+  .week-dot { text-align: center; padding: 12px 4px; border-radius: 12px; cursor: pointer; transition: all 0.2s; border: 1.5px solid transparent; }
+  .week-dot:hover { background: rgba(255,255,255,0.08); }
+  .week-dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 4px 12px rgba(242,101,34,0.3); }
+  .week-dot.active .dot-day,.week-dot.active .dot-num { color: #fff !important; }
+  .week-dot .dot-day { font-size: 0.62rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
+  .week-dot .dot-num { font-size: 1.25rem; font-weight: 800; color: rgba(255,255,255,0.8); margin: 3px 0; }
+  .week-dot .dot-status { width: 6px; height: 6px; border-radius: 50%; margin: 0 auto; }
+  .week-dot.past .dot-num { color: rgba(255,255,255,0.3); }
+  .week-dot.past .dot-status { background: rgba(255,255,255,0.2); }
+  .week-dot.today .dot-num { color: var(--accent); }
+  .week-dot.today .dot-status { background: var(--accent); }
+  .week-dot.upcoming .dot-num { color: rgba(255,255,255,0.7); }
+  .week-dot.upcoming .dot-status { background: rgba(255,255,255,0.3); }
+
+  /* ── Main ── */
+  .main-content { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+  .day-card { background: var(--white); border: 1px solid var(--border-light); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .card-header { display: flex; align-items: flex-start; gap: 14px; padding: 28px 28px 24px; border-bottom: 1px solid var(--border-light); background: linear-gradient(135deg,#fff7f3 0%,#fff 100%); }
+  .card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(242,101,34,0.12); color: var(--accent); font-size: 1.2rem; }
+  .card-header-text h2 { font-size: 1.15rem; font-weight: 700; color: var(--heading-dark); margin-bottom: 4px; }
+  .card-header-text p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+  .card-header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; align-self: center; }
+  .status-badge { display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 100px; padding: 4px 12px; white-space: nowrap; }
+  .status-badge.today { color: #fff; background: var(--accent); }
+  .status-badge.past { color: #065f46; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.22); }
+  .status-badge.upcoming { color: #1e3a8a; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.22); }
+  .content-type-chip { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 100px; font-size: 0.68rem; font-weight: 700; border: 1px solid transparent; white-space: nowrap; }
+  .content-type-chip.educate { background: rgba(59,130,246,0.1); color: #1e3a8a; border-color: rgba(59,130,246,0.22); }
+  .content-type-chip.engage { background: rgba(139,92,246,0.1); color: #5b21b6; border-color: rgba(139,92,246,0.22); }
+  .content-type-chip.proof { background: rgba(16,185,129,0.1); color: #064e3b; border-color: rgba(16,185,129,0.22); }
+  .content-type-chip.community { background: rgba(242,101,34,0.1); color: #b74c0e; border-color: rgba(242,101,34,0.2); }
+  .content-type-chip.pain { background: rgba(239,68,68,0.1); color: #991b1b; border-color: rgba(239,68,68,0.2); }
+  .content-type-chip.demo { background: rgba(14,165,233,0.1); color: #0c4a6e; border-color: rgba(14,165,233,0.2); }
+
+  /* ── Video Timeline ── */
+  .video-timeline { padding: 28px; }
+  .timeline-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .timeline-header h3 { font-size: 1.05rem; font-weight: 700; color: var(--heading-dark); }
+  .timeline-total { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); background: var(--bg-grey); padding: 4px 12px; border-radius: 100px; }
+
+  .video-section { border: 1px solid var(--border-light); border-radius: 16px; overflow: hidden; margin-bottom: 16px; }
+  .video-section:last-child { margin-bottom: 0; }
+  .section-header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; cursor: pointer; transition: background 0.2s; }
+  .section-header:hover { background: var(--bg-grey); }
+  .section-header.open { border-bottom: 1px solid var(--border-light); }
+  .section-badge { font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+  .section-badge.hook { background: var(--section-hook-light); color: var(--section-hook); border: 1px solid rgba(124,58,237,0.2); }
+  .section-badge.main { background: var(--section-main-light); color: var(--section-main); border: 1px solid rgba(242,101,34,0.2); }
+  .section-badge.cta { background: var(--section-cta-light); color: var(--section-cta); border: 1px solid rgba(5,150,105,0.2); }
+  .section-info { flex: 1; }
+  .section-info h4 { font-size: 0.88rem; font-weight: 700; color: var(--heading-dark); margin-bottom: 2px; }
+  .section-info p { font-size: 0.75rem; color: var(--text-muted); margin: 0; }
+  .section-avatar { display: flex; align-items: center; gap: 6px; font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .avatar-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .avatar-dot.ugc { background: var(--section-hook); }
+  .avatar-dot.firaz { background: var(--accent); }
+  .avatar-dot.real { background: #059669; }
+  .section-time { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+  .section-chevron { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+  .section-header.open .section-chevron { transform: rotate(180deg); }
+  .section-body { display: none; padding: 20px; }
+  .section-body.open { display: block; }
+  .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .section-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #9CA3AF; margin-bottom: 10px; }
+  .script-block { background: var(--bg-grey); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .script-block p { font-size: 0.82rem; line-height: 1.75; color: var(--text-primary); font-style: italic; }
+  .meta-mini { display: flex; flex-direction: column; gap: 10px; }
+  .meta-mini-item { display: flex; align-items: flex-start; gap: 8px; }
+  .meta-mini-item .icon { font-size: 0.9rem; flex-shrink: 0; }
+  .meta-mini-item strong { font-size: 0.78rem; font-weight: 600; color: var(--heading-dark); display: block; }
+  .meta-mini-item p { font-size: 0.75rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+
+  /* ── Set Design Block ── */
+  .set-design { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid var(--border-light); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .set-design h5 { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--section-hook); margin-bottom: 8px; }
+  .set-design p { font-size: 0.78rem; color: var(--text-primary); line-height: 1.6; margin: 0; }
+  .set-design ul { list-style: none; margin: 0; padding: 0; }
+  .set-design li { font-size: 0.78rem; color: var(--text-primary); line-height: 1.6; padding: 3px 0; padding-left: 16px; position: relative; }
+  .set-design li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.5; }
+
+  /* ── Editing Block ── */
+  .editing-block { background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .editing-block h5 { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px; }
+  .editing-block p, .editing-block li { font-size: 0.78rem; color: rgba(255,255,255,0.75); line-height: 1.6; }
+  .editing-block ul { list-style: none; margin: 0; padding: 0; }
+  .editing-block li { padding: 3px 0; padding-left: 16px; position: relative; }
+  .editing-block li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  /* ── Prompt Cards (for AI Video product) ── */
+  .section-prompts { border-top: 1px solid var(--border-light); padding: 16px 20px; background: #fafbfc; }
+  .transition-card { background: var(--bg-grey); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; transition: all 0.2s; cursor: pointer; margin-bottom: 8px; }
+  .transition-card:last-child { margin-bottom: 0; }
+  .transition-card:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
+  .transition-card.copied { border-color: var(--accent); background: rgba(242,101,34,0.03); }
+  .transition-card-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--border-light); background: linear-gradient(135deg,#fff7f3 0%,var(--bg-grey) 100%); }
+  .transition-panels { display: flex; align-items: center; gap: 6px; }
+  .panel-num { font-size: 0.62rem; font-weight: 800; color: var(--accent); background: var(--accent-light); border: 1px solid rgba(242,101,34,0.2); border-radius: 6px; padding: 2px 8px; }
+  .panel-arrow { color: var(--text-muted); font-size: 0.75rem; }
+  .transition-label { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .transition-copy-hint { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); opacity: 0; transition: opacity 0.2s; }
+  .transition-card:hover .transition-copy-hint { opacity: 1; }
+  .transition-card.copied .transition-copy-hint { opacity: 1; color: var(--accent); }
+  .transition-card-body { padding: 12px 14px; }
+  .transition-card-body p { font-size: 0.75rem; color: var(--text-primary); line-height: 1.6; margin: 0; }
+  .f2v-specs { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .f2v-spec { font-size: 0.62rem; font-weight: 700; padding: 3px 8px; background: var(--white); border: 1px solid var(--border-light); border-radius: 5px; color: var(--heading-dark); }
+  .f2v-spec span { color: var(--text-muted); font-weight: 500; }
+  .model-info { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(135deg,#0d1117 0%,#1a1f2e 100%); border-radius: 10px; margin-bottom: 12px; }
+  .model-info-icon { font-size: 1rem; }
+  .model-info strong { font-size: 0.78rem; font-weight: 700; color: #fff; display: block; }
+  .model-info p { font-size: 0.68rem; color: rgba(255,255,255,0.5); margin: 0; }
+
+  /* ── Footer ── */
+  .footer { background: var(--heading-dark); padding: 32px 0; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+  .footer p { font-size: 0.8rem; color: rgba(255,255,255,0.3); margin: 0; }
+  .footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) { .section-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 768px) {
+    .nav-inner { height: auto; padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
+    .product-tabs { order: 3; width: 100%; justify-content: center; }
+    .hero-header { padding: 32px 0 44px; }
+    .hero-content { padding: 0 16px; }
+    .main-content { padding: 24px 16px 64px; }
+    .card-header { padding: 20px; flex-wrap: wrap; }
+    .card-header-right { margin-left: 0; margin-top: 8px; }
+    .video-timeline { padding: 20px; }
+    .section-header { padding: 12px 16px; flex-wrap: wrap; gap: 8px; }
+    .section-body { padding: 16px; }
+    .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .week-strip { gap: 2px; padding: 4px; }
+    .week-dot { padding: 8px 2px; }
+    .week-dot .dot-num { font-size: 1rem; }
+    .product-tab { padding: 6px 10px; font-size: 0.68rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="nav-inner">
+  <div class="nav-brand"><div class="nav-logo">A</div><span>Adletic Agency</span></div>
+  <div class="product-tabs" id="productTabs">
+    <button class="product-tab active" onclick="switchProduct('ai-video')"><span class="tab-emoji">&#127916;</span> AI Video</button>
+    <button class="product-tab" onclick="switchProduct('ai-employee')"><span class="tab-emoji">&#129302;</span> AI Employee</button>
+    <button class="product-tab" onclick="switchProduct('paid-ads')"><span class="tab-emoji">&#128640;</span> Paid Ads</button>
+  </div>
+  <div class="nav-date" id="topDate"></div>
+</div></nav>
+
+<section class="hero-header">
+  <div class="hero-content">
+    <div class="hero-eyebrow" id="heroEyebrow"><span class="eyebrow-dot"></span>Personal Brand Content Lab</div>
+    <h1 class="hero-title" id="heroTitle">Full <span class="hero-title-accent">Video Plan</span></h1>
+    <p class="hero-subtitle" id="heroSubtitle">Each video broken into sections with scripts, set design, and production notes.</p>
+  </div>
+  <div class="week-section"><div class="week-strip" id="weekOverview"></div></div>
+</section>
+
+<div class="main-content" id="cardsContainer"></div>
+
+<footer class="footer"><div class="footer-inner">
+  <p>&copy; 2026 Adletic Agency</p>
+  <p><a href="https://adleticagency.com">adleticagency.com</a></p>
+</div></footer>
+
+<script>
+// ═══════════════════════════════════════════════
+//  PRODUCT: AI VIDEO (UGC hooks + Firaz main)
+// ═══════════════════════════════════════════════
+const MAIN_AVATAR_PROMPT = `Hyper-realistic character portrait. Shot on iPhone 15 Pro, vertical 9:16. No AI plastic look, no text overlays.
+
+Subject: Young Malaysian man, early-mid 20s, Malay heritage. Navy blue baseball cap, dark sunglasses on cap. Silver chain necklace with pendant. Navy blue polo shirt under black quilted puffer vest. Blue straight-leg jeans. Black chunky boots. Silver wristwatch. Keys on belt loop. Confident streetwear aesthetic — young entrepreneur energy.
+
+Medium shot from waist up, 35mm lens. Confident expression. Natural outdoor Malaysian lighting. Vertical 9:16.`;
+
+const AI_VIDEO_PLAN = [
+  {
+    day: 'Monday', title: 'MY RM12 SKINCARE ROUTINE', contentType: 'educate', contentTypeLabel: 'Educate',
+    totalDuration: '~45-60s',
+    sections: [
+      { type:'hook', title:'Hook — Stop Scrolling If Your Skin Is Mid', avatar:'UGC Avatar', avatarType:'ugc', duration:'0-8s',
+        description:'\"Stop scrolling if\" format — one of TikTok\'s highest-performing hook patterns right now. Direct call-out creates instant self-selection.',
+        tiktokFormat:'🔥 STOP SCROLLING IF — Direct audience call-out that forces self-selection. Currently one of the most viral hook formats on TikTok MY/SG. The viewer either relates and stays, or scrolls. Either way, you win because your audience self-qualifies.',
+        script:`Stop scrolling if your skin is mid right now.\nNo like actually, listen.\nThis cleanser? RM12. From Shopee. RM12.\nMy friend said try, aku macam yeah right lah.\nTwo weeks later bro — no filter, bare face, LOOK.\nMy skin literally said glow up era—\njap, before that, I am entirely AI generated tau, hehe.`,
+        music:'Doja Cat "Paint The Town Red" slowed remix — or trending "oh no" sound', hookText:'STOP SCROLLING if your skin is mid rn 🧴',
+        setDesign:{ location:'Bathroom mirror, harsh overhead light (intentionally unflattering at first for "real" effect)', lighting:'Ring light visible in eyes + overhead fluorescent for that raw iPhone selfie look', camera:'iPhone 15 Pro front cam, arm\'s length, slight high angle (classic selfie)', framing:'CU face and shoulders, product enters frame at chest level', props:'CeraVe cleanser bottle, messy bathroom counter with other products, towel on shoulder', wardrobe:'Grey oversized band tee, claw clip bun, no makeup (bare face is the point)' },
+        editing:{ cuts:'Quick zoom-in on "RM12" (punch zoom), jump cut between talking and showing product', transitions:'None — raw cuts only. Polished transitions kill the UGC energy.', text:'Big bold "STOP SCROLLING" at top first 0.5s, then "RM12 🤯" pop-up when price mentioned, "AI GENERATED" red flash on reveal', sound:'Vinyl scratch or record stop on reveal moment. Subtle "ding" on price reveal.', pacing:'Fast first 3 seconds (hook), slightly slower middle (build trust), abrupt energy shift on reveal' },
+        nanoPrompts:[
+          { label:'UGC AVATAR', step:1, prompt:`Hyper-realistic portrait. iPhone 15 Pro, 9:16. Young woman, 21, mixed Malay-Chinese. Claw clip bun, grey band tee, gold studs. CU portrait, 85mm lens. No CGI.` },
+          { label:'HOOK PANELS', step:2, prompt:`4-panel UGC storyboard. iPhone 15 Pro, 9:16. Bathroom — CeraVe, ring light. Panel 1: Selfie talking. Panel 2: Holding CeraVe. Panel 3: Squeezing cleanser. Panel 4: AI reveal expression shift.` }
+        ],
+        i2vClips:[
+          { label:'Skincare Selfie', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Girl talking to camera in bathroom. Ring light. Bubbly energy.\nAUDIO: "Okay so this cleanser right, RM12 je from Shopee..."` },
+          { label:'AI Reveal', panels:'3-4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Expression shifts. Eyes widen. Shy smile.\nAUDIO: "Jap — I am entirely AI generated tau, hehe. But hold on..."` }
+        ]
+      },
+      { type:'main', title:'Main Content — The Real Talk', avatar:'Firaz (You)', avatarType:'firaz', duration:'8-40s',
+        description:'You step in after the AI reveal to deliver value',
+        script:`Yo, that wasn't real.\nBut what I'm about to tell you — this is.\nI'm Firaz, and that AI avatar?\nI made her. In about 10 minutes.\nMost brands still paying RM5K for one video.\nWe just showed you what AI can do.\nBut the real game isn't the avatar.\nIt's the strategy behind it.\nRM12 skincare? That hook works because it's specific.\nNot "affordable skincare" — RM12. From Shopee.\nThat's what stops the scroll.`,
+        music:'Switch to confident beat', keyPoints:['Specific numbers stop scrolls','AI avatar is the hook, you are the authority','Hook psychology: problem + specific solution'],
+        nanoPrompts:[
+          { label:'MAIN AVATAR', step:1, prompt:MAIN_AVATAR_PROMPT },
+          { label:'MAIN PANELS', step:2, prompt:`4-panel storyboard. Firaz in workspace. Panel 1: Talking to camera, MacBook behind. Panel 2: Over-shoulder showing AI tools. Panel 3: Close-up teaching. Panel 4: Confident lean back.` }
+        ],
+        i2vClips:[
+          { label:'The Real Talk', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Firaz talking to camera. Workspace. Confident.\nAUDIO: "Yo, that wasn't real. But I made her in 10 minutes. Most brands paying RM5K for one video..."` },
+          { label:'The Breakdown', panels:'3-4', inputPanel:3, duration:8, lipSync:'Yes', motion:`Teaching close-up, counting points.\nAUDIO: "RM12 skincare — that hook works because it's specific. Not 'affordable' — RM12, from Shopee. That stops the scroll."` }
+        ]
+      },
+      { type:'cta', title:'CTA — Close', avatar:'Firaz (You)', avatarType:'firaz', duration:'40-50s',
+        description:'Strong close with CTA',
+        script:`If you want to learn how to build content like this —\nlink in bio.\nOr just follow. I drop this every week.\nPeace.`,
+        music:'Beat fade out',
+        i2vClips:[{ label:'CTA', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Firaz points at camera. Casual close.\nAUDIO: "Link in bio. Or just follow. Peace."` }]
+      }
+    ]
+  },
+  { day:'Tuesday', title:'GRWM FIRST DATE', contentType:'engage', contentTypeLabel:'Engage', totalDuration:'~45-60s',
+    sections:[
+      { type:'hook', title:'Hook — POV: 10 Min Before Your First Date', avatar:'UGC Avatar', avatarType:'ugc', duration:'0-8s',
+        description:'POV format — TikTok\'s bread and butter. "POV: you\'re doing X" creates instant immersion. Viewer becomes the main character.',
+        tiktokFormat:'🎬 POV FORMAT — "POV: [situation]" is consistently one of TikTok\'s most engaged formats. It works because the viewer is placed INTO the scenario. For GRWM specifically, POV + GRWM is a combo that dominates the For You page because it doubles the intimacy.',
+        script:`POV: 10 minutes before your first Bumble date.\nOkay GRWM.\nNervous gila bro, hands literally shaking.\nDah tukar baju three times.\nWhite tee. Classic. Can't go wrong.\nDior Sauvage on the wrist—\nwait, I'm actually AI generated. Surprise!`,
+        music:'Tame Impala "Let It Happen" sped up — or trending anxiety/hype audio', hookText:'POV: 10 minutes before your first date 😰',
+        setDesign:{ location:'Bedroom — messy but aesthetic. Fairy lights, sneakers on floor, bed unmade. Real guy energy.', lighting:'Warm tungsten bedroom lamp + phone screen glow. Golden hour through window if possible.', camera:'Phone propped on dresser (POV from phone perspective), then handheld mirror selfie', framing:'Wide room shot first (establishing), then CU mirror selfie for cologne moment', props:'Cologne bottle (Dior Sauvage), 3 shirts on bed (the ones he rejected), phone showing Bumble chat', wardrobe:'White tee + dark jeans, belt undone, barefoot — mid-getting-ready state' },
+        editing:{ cuts:'Match cuts between shirt changes (snap transitions), slow-mo on cologne spray', transitions:'Snap/click transitions for outfit changes. Slow-mo mist on cologne. Hard cut on reveal.', text:'"POV:" pinned at top, timer counting down "10:00... 9:58..." in corner, "💀" when hands shaking', sound:'Heartbeat bass underneath building anxiety. Record scratch on reveal.', pacing:'Building anxiety energy — starts chill, gets more frantic. Sudden stop on reveal.' },
+        nanoPrompts:[
+          { label:'UGC AVATAR', step:1, prompt:`Young man, 22, Malay-Indian. Sharp jaw, caramel skin, wavy hair, white tee, silver hoop earring. CU portrait. 9:16.` },
+          { label:'HOOK PANELS', step:2, prompt:`4-panel. Bedroom mirror GRWM. Panel 1: Adjusting hair. Panel 2: Talking to camera. Panel 3: Spraying cologne close-up. Panel 4: AI reveal expression.` }
+        ],
+        i2vClips:[
+          { label:'GRWM', panels:'1-3', inputPanel:1, duration:8, lipSync:'Yes', motion:`Mirror GRWM. Post-shower. Fairy lights.\nAUDIO: "GRWM first date. Nervous gila. White tee — classic."` },
+          { label:'Reveal', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Expression shifts.\nAUDIO: "Wait — I'm AI generated. This GRWM didn't happen. But the real guy's coming..."` }
+        ]
+      },
+      { type:'main', title:'Main — Content Psychology', avatar:'Firaz (You)', avatarType:'firaz', duration:'8-40s', description:'Why GRWM content works',
+        script:`That guy doesn't exist.\nBut you watched the whole thing.\nGRWM is the most intimate format on TikTok.\nYou feel like you're in someone's room.\nThat's parasocial connection.\nBrands pay millions for it.\nNow imagine creating it on demand.\nAny face, any demographic, any product.`,
+        music:'Confident beat', keyPoints:['GRWM = highest watch time format','Parasocial connection = trust','AI creates any demographic on demand'],
+        nanoPrompts:[{ label:'MAIN AVATAR', step:1, prompt:MAIN_AVATAR_PROMPT }, { label:'MAIN PANELS', step:2, prompt:`Firaz at workspace. Teaching why GRWM works. MacBook showing analytics.` }],
+        i2vClips:[
+          { label:'Why GRWM', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Firaz teaching. Workspace.\nAUDIO: "GRWM is the most intimate format. Parasocial connection. Brands pay millions for it."` },
+          { label:'The Play', panels:'3-4', inputPanel:3, duration:8, lipSync:'Yes', motion:`Close-up then wider.\nAUDIO: "Imagine creating that on demand. Any face, any product. That's what we build."` }
+        ]
+      },
+      { type:'cta', title:'CTA', avatar:'Firaz (You)', avatarType:'firaz', duration:'40-50s', description:'Drive follows',
+        script:`Follow. I break down content formats daily.\nLink in bio to build this for your brand.`,
+        music:'Fade', i2vClips:[{ label:'CTA', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Casual close.\nAUDIO: "Follow. Link in bio. Later."` }]
+      }
+    ]
+  },
+  { day:'Wednesday', title:'BEST MAMAK IN KL', contentType:'educate', contentTypeLabel:'Educate', totalDuration:'~45-60s',
+    sections:[
+      { type:'hook', title:'Hook — I Bet You Didn\'t Know This Mamak Exists', avatar:'UGC Avatar', avatarType:'ugc', duration:'0-8s',
+        description:'"I bet you didn\'t know" format — creates curiosity gap and slight challenge to the viewer. Works insanely well for food/hidden gem content on MY TikTok.',
+        tiktokFormat:'🧠 "I BET YOU DIDN\'T KNOW" — This format creates a curiosity gap AND a micro-challenge. The viewer thinks "bet I do" and watches to prove you wrong, OR thinks "wait what" and watches to learn. Either way = watch time. Currently trending hard on Malaysian food TikTok.',
+        script:`I bet you didn't know about this mamak.\nHidden in Bangsar, no signboard.\nRoti canai — look at this. RM2. CRISPY gila.\nTeh tarik foam? Perfect pull every time.\nI've been coming here since uni and—\neh jap, actually I'm AI generated je. Got you!`,
+        music:'Khruangbin "Time (You and I)" vibes — or trending "oh you didn\'t know?" audio', hookText:'I bet you didn\'t know this mamak exists 🫢',
+        setDesign:{ location:'Mamak stall at night — fluorescent lighting, red/green plastic chairs, stainless steel tables. THE vibe.', lighting:'Harsh overhead fluorescent (don\'t fight it, embrace the mamak aesthetic). Phone flashlight for food close-up.', camera:'iPhone front cam for selfie talking, then flip to back cam for food shots (classic food review switch)', framing:'Selfie CU first (talking), then overhead flat-lay of food, then back to selfie for reveal', props:'Roti canai on banana leaf, steel bowl of dal, teh tarik in glass, stainless condiment holder', wardrobe:'Dusty rose hijab, black graphic tee, gold hoops — casual mamak visit fit' },
+        editing:{ cuts:'Quick flip from front to back camera (classic food TikTok move), zoom punch on "RM2"', transitions:'Camera flip transition (front→back) for food reveal. Swipe transition between dishes.', text:'"I BET YOU DIDN\'T KNOW 👀" at top, price tag pop-up "RM2 💀", Google Maps pin drop animation', sound:'Sizzle sound effect on food reveal. "Ding" on price. Cash register sound optional.', pacing:'Slow mysterious start (curiosity), speed up on food reveal (excitement), sudden stop on AI reveal' },
+        nanoPrompts:[
+          { label:'UGC AVATAR', step:1, prompt:`Young woman, 20, Malay. Round face, dusty rose hijab, gold hoops, black graphic tee. CU portrait. 9:16.` },
+          { label:'HOOK PANELS', step:2, prompt:`4-panel mamak stall at night. Panel 1: Selfie excited. Panel 2: Overhead food flat-lay. Panel 3: Talking about food. Panel 4: Playful AI reveal.` }
+        ],
+        i2vClips:[
+          { label:'Mamak', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Hijabi at mamak. Excited. Fluorescent lights.\nAUDIO: "Korang KENA try. Roti canai crispy gila, RM2 je."` },
+          { label:'Reveal', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Smirk reveal.\nAUDIO: "Eh jap — AI generated je. Got you! But someone real's coming..."` }
+        ]
+      },
+      { type:'main', title:'Main — Hook Engineering', avatar:'Firaz (You)', avatarType:'firaz', duration:'8-40s', description:'The hook formula breakdown',
+        script:`Your brain thought it was real for 3 seconds.\nThat's all you need.\nFormula: Familiar setting + specific detail + emotional trigger.\nMamak? Everyone knows mamak.\nRM2? Specific. Brain locks in.\n"Ended every cafe in Bangsar"? Emotional trigger.\nThis is hook engineering.\nThe AI face is delivery. The hook is the weapon.`,
+        music:'Confident analytical', keyPoints:['3 seconds to stop the scroll','Familiar + specific + emotion = hook','Hook is the weapon, AI is delivery'],
+        nanoPrompts:[{ label:'MAIN AVATAR', step:1, prompt:MAIN_AVATAR_PROMPT }, { label:'MAIN PANELS', step:2, prompt:`Firaz at whiteboard showing hook formula. Teaching energy. Close-up for key point.` }],
+        i2vClips:[
+          { label:'Formula', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Firaz teaching.\nAUDIO: "3 seconds. That's all. Familiar + specific + emotional trigger."` },
+          { label:'Weapon', panels:'3-4', inputPanel:3, duration:8, lipSync:'Yes', motion:`Intense close-up.\nAUDIO: "Hook engineering. AI face is delivery. The hook is the weapon."` }
+        ]
+      },
+      { type:'cta', title:'CTA', avatar:'Firaz (You)', avatarType:'firaz', duration:'40-50s', description:'Save + follow',
+        script:`Save this. One hook formula every week.\nLink in bio for hooks written for YOUR brand. Peace.`,
+        music:'Fade', i2vClips:[{ label:'CTA', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Points at camera.\nAUDIO: "Save this. Link in bio. Peace."` }]
+      }
+    ]
+  },
+  { day:'Thursday', title:'UNI STUDENT DAY IN LIFE', contentType:'engage', contentTypeLabel:'Engage', totalDuration:'~45-60s',
+    sections:[
+      { type:'hook', title:'Hook — Nobody Asked But Here\'s My 5AM Uni Life', avatar:'UGC Avatar', avatarType:'ugc', duration:'0-8s',
+        description:'"Nobody asked but" format — self-deprecating hook that disarms the viewer. Feels like an unfiltered diary entry. Massive engagement on student/lifestyle TikTok.',
+        tiktokFormat:'📓 "NOBODY ASKED BUT" — Self-deprecating opener that creates instant relatability. The format says "I know you didn\'t ask, but I\'m telling you anyway" which paradoxically makes people MORE curious. Huge on student TikTok because it feels like a genuine diary dump.',
+        script:`Nobody asked but here's my 5am routine as a uni student.\n5:45 alarm. Again. Semester literally killing me.\nShower, grab bag, macam zombie.\nLRT packed gila — sardine tin vibes.\nHaven't even had coffee yet bro—\neh, aku ni bukan real. AI generated. Fully.`,
+        music:'Mac DeMarco "Chamber of Reflection" slowed — or trending "day in my life" lo-fi audio', hookText:'nobody asked but here\'s my 5am uni routine 💀',
+        setDesign:{ location:'Small student room — single bed, study desk with lamp, clothes on chair. Then LRT station.', lighting:'Dark room lit only by phone alarm screen (blue-white glow). Then harsh LRT station fluorescent.', camera:'Phone on desk filming alarm (POV), then walking selfie to LRT, then platform shot', framing:'Low angle from pillow level (alarm shot), walking selfie (shaky = authentic), wide platform shot', props:'Phone showing 5:45 alarm, Herschel backpack, earbuds, reusable coffee tumbler (empty)', wardrobe:'Black tee, joggers, slides → changes to proper shoes. Messy hair under cap' },
+        editing:{ cuts:'Time-lapse getting ready (3x speed with timer), normal speed for LRT wait, hard cut reveal', transitions:'Clock wipe transitions between routine steps. Swipe up for location change (room→station).', text:'"nobody asked but 🤷" at start, alarm time "5:45 AM" large, "💀" floating when showing packed LRT', sound:'iPhone alarm sound opening (instant recognition), lo-fi beat kicks in after alarm, muffled on reveal', pacing:'Slow drag energy (tired, reluctant) building to resigned acceptance. Deadpan delivery throughout.' },
+        nanoPrompts:[
+          { label:'UGC AVATAR', step:1, prompt:`Young man, 21, Chinese-Malay. Gold-frame glasses, black tee, Herschel backpack. CU portrait. 9:16.` },
+          { label:'HOOK PANELS', step:2, prompt:`4-panel. Panel 1: Dark room, alarm 5:45. Panel 2: LRT platform. Panel 3: On LRT. Panel 4: Quiet reveal.` }
+        ],
+        i2vClips:[
+          { label:'Morning', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Alarm. LRT.\nAUDIO: "5:45 alarm. Again. Rush to LRT. Packed gila."` },
+          { label:'Reveal', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Pushes glasses. Quiet reveal.\nAUDIO: "Aku bukan real. AI generated. But someone real wants to tell you why this matters..."` }
+        ]
+      },
+      { type:'main', title:'Main — Relatability Marketing', avatar:'Firaz (You)', avatarType:'firaz', duration:'8-40s', description:'Why relatable > polished',
+        script:`That student doesn't exist.\nBut you related to him.\nRelatability is the most underrated weapon in marketing.\nPolished gets likes. Relatable gets saved and shared.\nWhen someone sees their life in your content, they trust you.\nThat's how you build audience. With truth.`,
+        music:'Thoughtful beat', keyPoints:['Relatable > polished for engagement','Feeling seen = trust','Build with truth, not production value'],
+        nanoPrompts:[{ label:'MAIN AVATAR', step:1, prompt:MAIN_AVATAR_PROMPT }, { label:'MAIN PANELS', step:2, prompt:`Firaz in casual setting. Teaching relatability. Coffee shop or outdoor KL.` }],
+        i2vClips:[
+          { label:'Relatability', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Casual setting.\nAUDIO: "Polished gets likes. Relatable gets saved and shared. Big difference."` },
+          { label:'Truth', panels:'3-4', inputPanel:3, duration:8, lipSync:'Yes', motion:`Close-up.\nAUDIO: "When people see their life in your content, they trust you. Build with truth."` }
+        ]
+      },
+      { type:'cta', title:'CTA', avatar:'Firaz (You)', avatarType:'firaz', duration:'40-50s', description:'Engagement CTA',
+        script:`Comment "RELATABLE" if you felt that.\nFollow for content strategy daily. Peace.`,
+        music:'Fade', i2vClips:[{ label:'CTA', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Casual close.\nAUDIO: "Comment RELATABLE. Follow. Peace."` }]
+      }
+    ]
+  },
+  { day:'Friday', title:'RM30 BUNDLE HAUL', contentType:'educate', contentTypeLabel:'Educate', totalDuration:'~45-60s',
+    sections:[
+      { type:'hook', title:'Hook — Delulu Is the Solulu: RM30 = Zara Fit', avatar:'UGC Avatar', avatarType:'ugc', duration:'0-8s',
+        description:'Delulu format — "delulu is the solulu" is peak Gen Z energy. Applying delusional confidence to thrift shopping creates comedy + aspiration.',
+        tiktokFormat:'✨ DELULU IS THE SOLULU — The "delulu" trend celebrates delusional confidence as a lifestyle. Applied to bundle shopping: "I\'m delusional enough to think RM30 can give me Zara vibes" — and then proving it RIGHT. This format turns budget content into aspirational content. Currently viral across MY/SG TikTok.',
+        script:`Delulu is the solulu okay.\nRM30 budget at bundle shop? I'm getting a full Zara fit.\nVintage band tee — RM8. Print still cantik.\nOversized blazer — RM12. I look like money bro.\nTotal damage: RM30. Pavilion girls shaking—\neh, aku tak real. Fully AI generated.`,
+        music:'Dua Lipa "Levitating" sped up — or trending "she\'s delusional" audio', hookText:'delulu is the solulu: RM30 bundle = Zara fit ✨',
+        setDesign:{ location:'Bundle shop — packed racks, fluorescent lights, "RM10 SEMUA" signs. Chaotic energy.', lighting:'Harsh fluorescent overhead (embrace it). Phone flashlight for close-up on price tags.', camera:'Walking selfie through aisles (handheld, slightly shaky), then mirror selfie for outfit reveal', framing:'Wide aisle shot first, then CU on finds (tags, textures), then full-body mirror selfie', props:'Clothes on hangers, masking tape price tags with red marker, shopping bag filling up', wardrobe:'Start in basic outfit, then show bundle finds layered on — the transformation IS the content' },
+        editing:{ cuts:'Quick cuts between finds (grab-and-show rhythm), slow-mo on mirror outfit reveal', transitions:'Snap transitions between finds. "Before/after" split screen for outfit transformation.', text:'"DELULU IS THE SOLULU" title, price tags popping up "RM8 💀" "RM12 😭", running total counter', sound:'Cash register "cha-ching" on each find. Dramatic reveal music on outfit mirror moment.', pacing:'Fast excited energy throughout (treasure hunt vibe), dramatic slow-down for final outfit reveal' },
+        nanoPrompts:[
+          { label:'UGC AVATAR', step:1, prompt:`Young woman, 22, Eurasian-Malay. Freckles, wavy hair, hazel eyes, silver rings. CU portrait. 9:16.` },
+          { label:'HOOK PANELS', step:2, prompt:`4-panel bundle shop. Panel 1: Digging through rack. Panel 2: Close-up RM8 price tag. Panel 3: Holding blazer. Panel 4: Knowing smile reveal.` }
+        ],
+        i2vClips:[
+          { label:'Bundle', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Digging racks. Excited.\nAUDIO: "Bundle haul! RM30 budget. Vintage tee RM8!"` },
+          { label:'Reveal', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Knowing smile.\nAUDIO: "Aku tak real. AI generated. But the real content's coming..."` }
+        ]
+      },
+      { type:'main', title:'Main — Content That Sells Without Selling', avatar:'Firaz (You)', avatarType:'firaz', duration:'8-40s', description:'Haul format as sales framework',
+        script:`Haul format is secretly the best sales framework.\nYou're not selling — you're showing.\n"RM12 and I look like Zara" — that's aspirational proof.\nThe viewer sells themselves.\nYou don't sell the product. You sell the transformation.`,
+        music:'Upbeat confident', keyPoints:['Show don\'t sell','Aspirational proof > hard sell','Sell the transformation'],
+        nanoPrompts:[{ label:'MAIN AVATAR', step:1, prompt:MAIN_AVATAR_PROMPT }, { label:'MAIN PANELS', step:2, prompt:`Firaz standing, dynamic. Whiteboard "Show > Sell". Teaching energy.` }],
+        i2vClips:[
+          { label:'Show>Sell', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Dynamic teaching.\nAUDIO: "Haul format — best hidden sales framework. You're showing, not selling."` },
+          { label:'Transform', panels:'3-4', inputPanel:3, duration:8, lipSync:'Yes', motion:`Key insight.\nAUDIO: "Don't sell the product. Sell the transformation. Haul does it naturally."` }
+        ]
+      },
+      { type:'cta', title:'CTA', avatar:'Firaz (You)', avatarType:'firaz', duration:'40-50s', description:'Framework CTA',
+        script:`Screenshot this. Use it for your next product video.\nLink in bio for the full playbook. Peace.`,
+        music:'Fade', i2vClips:[{ label:'CTA', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Points at camera.\nAUDIO: "Screenshot this. Link in bio. Peace."` }]
+      }
+    ]
+  },
+  { day:'Saturday', title:'DATE VLOG PAVILION KL', contentType:'proof', contentTypeLabel:'Social Proof', totalDuration:'~45-60s',
+    sections:[
+      { type:'hook', title:'Hook — Allow Me to Reintroduce My Relationship', avatar:'UGC Avatar', avatarType:'ugc', duration:'0-10s',
+        description:'"Allow me to reintroduce" format — originally from Jay-Z, now a TikTok staple for flex/reveal content. Perfect for couple content that shows off a relationship.',
+        tiktokFormat:'👑 "ALLOW ME TO REINTRODUCE" — This format borrowed from Jay-Z\'s iconic line has become a TikTok power move. It\'s used for confident re-introductions that showcase something aspirational. For couple content, it says "we\'re THAT couple" — creates instant envy/aspiration. Trending on relationship TikTok with the Nicki Minaj "Everybody" sound.',
+        script:`Allow me to reintroduce ourselves.\nDate day. He surprised me — Pavilion.\nPasta first, then sushi. "Dessert?" "Obviously."\nWe're that couple lah. Main character energy—\nWait — both of us? AI generated.\nThis date? Not real. At all.`,
+        music:'Nicki Minaj "Everybody" intro — or Jay-Z "Public Service Announcement" beat', hookText:'allow me to reintroduce my relationship 💅',
+        setDesign:{ location:'Pavilion KL — escalator area, food court, dessert spot. Multiple locations for montage feel.', lighting:'Warm mall ambient + golden hour through Pavilion glass ceiling. Fairy lights at restaurant.', camera:'Couple selfie angle (slightly above), walking shots from friend/tripod perspective', framing:'Couple selfie CU, then wide walking shot (hand in hand), food flat-lay, dessert close-up', props:'Shopping bags, food plates, dessert (aesthetic plating), couple matching detail (bracelet/watch)', wardrobe:'Guy: sage green shirt, silver watch. Girl: floral sundress, curtain bangs. Coordinated not matching.' },
+        editing:{ cuts:'Montage rhythm — each cut on beat drop. Fast cuts between date moments.', transitions:'Smooth slide transitions between locations. Slow-mo hand grab. Speed ramp on walking shot.', text:'"ALLOW ME TO REINTRODUCE 👑" opening title, couple name tag pop-up, heart emojis floating', sound:'Beat drops on each transition. Crowd noise fading between locations. Glass clink on cheers moment.', pacing:'Confident slow start (the reintroduction), then fast montage of date highlights, abrupt freeze on reveal' },
+        nanoPrompts:[
+          { label:'COUPLE AVATAR', step:1, prompt:`Couple portrait. Guy: Malay, 23, dimples, sage green shirt. Girl: Chinese-Malay, 22, curtain bangs, floral sundress. Together, CU. 9:16.` },
+          { label:'HOOK PANELS', step:2, prompt:`4-panel Pavilion KL. Panel 1: Couple selfie. Panel 2: Walking hand-in-hand. Panel 3: Food court selfie. Panel 4: Both freeze — couple reveal.` }
+        ],
+        i2vClips:[
+          { label:'Date', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Couple selfie. Pavilion.\nAUDIO: "Date day! Pavilion. Pasta and sushi."` },
+          { label:'Reveal', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Both freeze.\nAUDIO: "Both AI generated. This date? Not real."` }
+        ]
+      },
+      { type:'main', title:'Main — Social Proof at Scale', avatar:'Firaz (You)', avatarType:'firaz', duration:'10-40s', description:'Creating social proof without real testimonials',
+        script:`That couple? Pixels.\nBut you felt their chemistry.\nThat's social proof on your brain.\nMost brands wait months for testimonials.\nWhat if you create that feeling day one?\nPeople don't buy products.\nThey buy the version of themselves that uses it.\nThat couple made you imagine YOUR next date.`,
+        music:'Building emotional', keyPoints:['Social proof = emotion not logic','Aspiration > testimonials','People buy the better version of themselves'],
+        nanoPrompts:[{ label:'MAIN AVATAR', step:1, prompt:MAIN_AVATAR_PROMPT }, { label:'MAIN PANELS', step:2, prompt:`Firaz outdoors, golden hour, city behind. Reflective then confident. Cinematic.` }],
+        i2vClips:[
+          { label:'Feeling', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Golden hour. City behind.\nAUDIO: "You felt their chemistry. Social proof on your brain. What if you create that day one?"` },
+          { label:'Scale', panels:'3-4', inputPanel:3, duration:8, lipSync:'Yes', motion:`Wide city shot.\nAUDIO: "People buy the version of themselves that uses it. Social proof at scale."` }
+        ]
+      },
+      { type:'cta', title:'CTA', avatar:'Firaz (You)', avatarType:'firaz', duration:'40-50s', description:'DM CTA',
+        script:`DM me "CONTENT" or link in bio.\nAdletic Agency. We build content systems.\nSee you tomorrow for the big reveal. Peace.`,
+        music:'Fade', i2vClips:[{ label:'CTA', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Confident close.\nAUDIO: "DM 'CONTENT'. Link in bio. Peace."` }]
+      }
+    ]
+  },
+  { day:'Sunday', title:'NONE OF THEM ARE REAL', contentType:'community', contentTypeLabel:'Community', totalDuration:'~60-90s',
+    sections:[
+      { type:'hook', title:'Hook — Nicki Freeze Frame: None of Them Are Real', avatar:'All UGC', avatarType:'ugc', duration:'0-10s',
+        description:'Nicki Freeze Frame format — rapid montage that freezes on each face with a bass hit. The "none of these are real" reveal becomes the ultimate plot twist payoff for the entire week.',
+        tiktokFormat:'🥶 NICKI FREEZE FRAME / BOOM CLAP REVEAL — Rapid montage with freeze-frames synced to bass hits. Each face freezes for 0.5s with a "BOOM" before cutting to the next. This format is used for "main character" compilations but here we subvert it — the freeze reveals they\'re ALL AI. The week-long payoff makes this the most shareable video of the series.',
+        script:`[No dialogue — rapid cuts of all six UGC avatars, each freezing on a bass hit. Text appears: "REAL?" on each face. Final frame: all six together. Text: "NONE OF THEM ARE REAL." Ethereal music building to piano.]`,
+        music:'Nicki Minaj "Everybody" beat drop — or Boom Clap audio for freeze frames', hookText:'none of these people are real. not one. 🤯',
+        setDesign:{ location:'Split — each avatar in their original setting (bathroom, bedroom, mamak, LRT, bundle shop, Pavilion). Final shot: dark studio for Firaz.', lighting:'Each scene matches original lighting. Final studio: single dramatic spot light.', camera:'Each avatar clip pulled from their original hook. Grid compilation. Then studio single cam.', framing:'Each avatar CU face (matching original hooks), then 2x3 grid of all six, then solo Firaz dramatic', props:'None new — all pulled from original week\'s footage. Grid layout is the visual device.' },
+        editing:{ cuts:'Bass-synced freeze frames (0.5s each). BOOM on each face. Rapid 6-face sequence in 3 seconds.', transitions:'Hard freeze (not smooth). Each face snaps to frozen. Final grid assembles piece by piece.', text:'"REAL?" stamped on each frozen face in red. Final: "NONE OF THEM ARE REAL" white on black. Week counter "DAY 1... DAY 2..." on each.', sound:'Bass hit on each freeze. Building synth underneath. Piano enters on final reveal. Silence before Firaz speaks.', pacing:'Extremely fast (6 faces in 3-4 seconds), then HARD STOP. Silence. Then Firaz enters slowly. Maximum contrast.' },
+        nanoPrompts:[{ label:'WEEK GRID', step:1, prompt:`Six phone-shaped frames in 2x3 grid. Each shows one creator in their hook moment. Devastatingly real faces. White background.` }],
+        i2vClips:[{ label:'Grid', panels:'1', inputPanel:1, duration:8, lipSync:'No', motion:`Slow zoom into 6-face grid. Ethereal music building.` }]
+      },
+      { type:'main', title:'Main — The Full Reveal', avatar:'Firaz (You)', avatarType:'firaz', duration:'10-50s', description:'The week was all AI',
+        script:`Enam muka. Enam life.\nNone of them are real. Not one.\nI made all of them.\nEvery face, every voice — AI generated.\nMost of korang tak perasan pun.\nThat's not a flex. That's a warning and an opportunity.\nBrands that understand this NOW will own the next 5 years.\nI showed you the future.\nAre you building for it?`,
+        music:'Emotional piano climax', keyPoints:['All 6 were AI — viewers didn\'t notice','Warning AND opportunity','Brands that move now win the next 5 years'],
+        nanoPrompts:[{ label:'MAIN AVATAR', step:1, prompt:MAIN_AVATAR_PROMPT }, { label:'REVEAL PANELS', step:2, prompt:`Dramatic single light. Dark studio. Firaz serious. Panel 1: Stepping into light. Panel 2: Arms wide. Panel 3: Intense close-up. Panel 4: Walking forward.` }],
+        i2vClips:[
+          { label:'Truth', panels:'1-2', inputPanel:1, duration:8, lipSync:'Yes', motion:`Dramatic single light.\nAUDIO: "Enam muka. None real. I made all of them. AI generated."` },
+          { label:'Future', panels:'3-4', inputPanel:3, duration:8, lipSync:'Yes', motion:`Close-up then wider.\nAUDIO: "Brands that understand this NOW own the next 5 years. Are you building for it?"` }
+        ]
+      },
+      { type:'cta', title:'CTA — Big Close', avatar:'Firaz (You)', avatarType:'firaz', duration:'50-70s', description:'Biggest CTA of the week',
+        script:`I'm Firaz. Adletic Agency.\nFull breakdown — link in bio.\nDM me "AI" and I'll send it.\nFollow for next week. It gets crazier. Peace.`,
+        music:'Piano fade', i2vClips:[{ label:'Big CTA', panels:'4', inputPanel:4, duration:8, lipSync:'Yes', motion:`Personal, direct.\nAUDIO: "I'm Firaz. Link in bio. DM 'AI'. Follow. Peace."` }]
+      }
+    ]
+  }
+];
+
+
+// ═══════════════════════════════════════════════
+//  PRODUCT: AI EMPLOYEE (AIOS) — Real shoot, no AI avatars
+// ═══════════════════════════════════════════════
+const AI_EMPLOYEE_PLAN = [
+  {
+    day: 'Monday', title: 'POV: YOU LOSE RM10K EVERY NIGHT', contentType: 'pain', contentTypeLabel: 'Pain Point',
+    totalDuration: '~45-60s',
+    sections: [
+      { type:'hook', title:'Hook — POV: Boss Checking WhatsApp at 10pm', avatar:'Firaz (You)', avatarType:'real', duration:'0-5s',
+        description:'POV format + loss aversion. The viewer IS the business owner losing leads in real-time. Pattern interrupt with the WhatsApp notification sound.',
+        script:`POV: You're a business owner and it's 10pm.\n*WhatsApp notification sound*\nNew lead.\nYour staff? Tidur.\nBy 8am tomorrow, that lead dah cakap dengan 3 competitors.\nCongrats. You just burned RM10K in your sleep.\nAnd this happens every. single. night.`,
+        music:'Dead silence first 2 seconds — just the WhatsApp notification sound. Then Nicki Minaj "Want Some More" instrumental kicks in on "Congrats." Beat syncs to each word.',
+        hookText:'POV: You lose RM10K every night and you don\'t even know it',
+        tiktokFormat: 'POV format + loss aversion hook. First 2 seconds: phone screen only (no face). WhatsApp notif sound = instant pattern interrupt because everyone\'s brain reacts to that sound. Nicki "Want Some More" beat drop on the reveal.',
+        setDesign: {
+          location: 'Dark bedroom / home office at night. NOT a workspace — this is 10pm, you\'re in bed scrolling.',
+          lighting: 'PHONE SCREEN GLOW ONLY for first 2 seconds. Single desk lamp after. Cool blue tones. The "doomscrolling in bed" lighting that every Gen Z knows.',
+          props: 'Phone showing actual WhatsApp notification with a lead message ("Hi, I saw your ad for the property in Bangsar..."). Messy bed visible. Alarm clock showing 10:03pm. The vibe is REAL — not staged.',
+          wardrobe: 'Plain tee or shirtless with blanket. This is raw "caught in bed" energy. NOT the founder look — that comes in the main section.',
+          camera: 'PHONE POV FIRST — literally film the phone screen receiving the notification. Then flip to face cam. The viewer should feel like they\'re watching YOUR phone. Handheld, slightly shaky.',
+          framing: 'Ultra tight on phone screen (first 2 sec). Then quick flip to face — half-lit by phone glow, pillow behind. The "oh shit" realization face.'
+        },
+        editing: {
+          cuts: 'Phone screen notification → face reaction → text overlay "RM10K" → back to phone showing 3 unread messages → face. RAPID. Each cut synced to the beat.',
+          transitions: 'Hard glitch cut on "Congrats" — screen shakes slightly. Zoom-push on "every. single. night." CapCut auto beat sync with the Nicki instrumental.',
+          text: 'POV text at top in TikTok native font. "RM10,000" flashes in RED bold when mentioned. Final frame: "and this happens EVERY NIGHT" in white bold, slight shake animation. All text slightly off-center like real TikTok.',
+          sound: 'WhatsApp notification sound (the real one) at 0:00. Silence for 1 beat. Then bass drops. Each stat gets a subtle impact sound. Cash register sound on "RM10K."',
+          pacing: '2 seconds of phone screen silence = scroll-stopper. Then FAST. 1-second cuts. The viewer barely processes before the next hit. Total hook: 5 seconds max.'
+        }
+      },
+      { type:'main', title:'Main — The Real Cost of Forgetting', avatar:'Firaz (You)', avatarType:'real', duration:'5-40s',
+        description:'Break down the actual RM cost of missed follow-ups',
+        script:`Here's the math.\nYou pay staff RM3-5K a month.\nThey handle maybe 20 leads a day. On a good day.\nBut after 6pm? Nothing.\nWeekends? Nothing.\nPublic holidays? Definitely nothing.\nMeanwhile your ads are running 24/7.\nYou're paying Meta to send you leads\nthat nobody's picking up.\nThat's not a staffing problem.\nThat's a system problem.\nAnd you can't solve a system problem with more people.\nYou solve it with a system.`,
+        music:'Beat drops in — confident, minimal electronic. Builds slowly.',
+        keyPoints: ['RM3-5K/month staff only works 8 hours','Ads run 24/7 but follow-up doesn\'t','System problem needs a system solution'],
+        setDesign: {
+          location: 'Clean workspace — switch from dark to well-lit. The energy shifts.',
+          lighting: 'Bright, clean key light. Professional but not corporate. Natural window light + ring light fill.',
+          props: 'MacBook showing a pipeline/CRM with red "missed" indicators. Whiteboard behind with quick math: "RM4K staff × 12 = RM48K/year". Calculator app on phone.',
+          wardrobe: 'Full outfit — navy cap, puffer vest, silver chain. The founder look.',
+          camera: 'Medium shot talking to camera. Cut to over-shoulder of MacBook for the math visual. Back to face for the key lines.',
+          framing: 'More breathing room than the hook. Wider frame = authority. Tighten to close-up for "system problem" line.'
+        },
+        editing: {
+          cuts: 'Slower than hook. Let the math land. 3-4 seconds per cut.',
+          transitions: 'Smooth zoom-ins for emphasis on key numbers. Quick whip-pan to MacBook screen.',
+          text: 'On-screen numbers floating in: "RM3-5K/month", "20 leads/day", "0 after 6pm". Use clean sans-serif white text.',
+          sound: 'Subtle "cha-ching" or cash register sound when mentioning money. Bass drop on "system problem."',
+          pacing: 'Medium. Conversational but with intentional pauses before key lines. Let "system problem" breathe.'
+        }
+      },
+      { type:'cta', title:'CTA — Intro AIOS', avatar:'Firaz (You)', avatarType:'real', duration:'40-50s',
+        description:'Soft tease of the solution — don\'t sell yet',
+        script:`What if I told you there's something\nthat replies to every lead in 4 seconds.\n24/7. No salary. No MC.\nTomorrow I'll show you exactly what it is.\nFollow kalau nak tau.`,
+        music:'Music lifts — hopeful note. Quick fade.',
+        setDesign: {
+          location: 'Same workspace',
+          lighting: 'Same but maybe slightly warmer — the energy is shifting from problem to possibility',
+          camera: 'Lean in closer to camera for the tease. Intimate. Like telling a secret.',
+          framing: 'Close-up. Direct eye contact. Conspiratorial energy.'
+        },
+        editing: {
+          cuts: 'Slow single take. Let the tease hang.',
+          text: '"4 SECONDS" pops up briefly. "FOLLOW" at the end.',
+          sound: 'Music resolves on a hopeful note. Clean end.',
+          pacing: 'Slow and deliberate. Each line has weight. Don\'t rush the tease.'
+        }
+      }
+    ]
+  },
+  {
+    day: 'Tuesday', title: 'ALLOW ME TO REINTRODUCE MYSELF', contentType: 'demo', contentTypeLabel: 'Demo',
+    totalDuration: '~60-90s',
+    sections: [
+      { type:'hook', title:'Hook — "Allow me to reintroduce myself" AI Employee Reveal', avatar:'Firaz (You)', avatarType:'real', duration:'0-5s',
+        description:'"Allow me to reintroduce myself" trending format. You stand still, freeze frame — beat drops — screen behind you lights up showing AIOS replying to leads in real-time. Nicki Minaj freeze-frame reveal energy.',
+        script:`*standing still, arms crossed, slight smirk*\n"Allow me to reintroduce myself."\n*beat drops*\n*screen behind lights up — WhatsApp messages flying*\nI'm not a chatbot.\nI'm not your intern.\nI'm your AI employee.\nAnd I just replied to 47 leads while you watched this.`,
+        music:'Use trending "Allow me to reintroduce myself" audio OR Nicki Minaj "Want Some More" freeze-frame beat. The freeze → beat drop → reveal is the format.',
+        hookText:'Allow me to reintroduce myself — I\'m your AI employee',
+        tiktokFormat: '"Allow me to reintroduce myself" trending format. Freeze pose → beat drop → transformation reveal. Currently one of the top trending formats. The "transformation" here is the screen behind you going from dark to showing AIOS live.',
+        setDesign: {
+          location: 'Standing in front of large monitor/TV — screen OFF at start',
+          lighting: 'Dramatic side light on you. Screen dark behind. When beat drops, screen lights up and illuminates the room — the lighting shift IS the reveal.',
+          props: 'Large monitor behind showing AIOS terminal with WhatsApp messages auto-sending in real-time. The screen should look ALIVE — messages scrolling, notifications popping. Phone in your hand buzzing with incoming auto-replies.',
+          wardrobe: 'Full founder fit — cap, puffer vest, chain. This is the "reintroduction" so you need to look sharp. Sunglasses on for the freeze frame, take them off on the reveal.',
+          camera: 'STATIC WIDE SHOT. You centered. Screen behind. The freeze-frame format requires a clean static shot. No movement until the beat drops. Then slight handheld energy after.',
+          framing: 'Full body or 3/4 shot. You centered. Screen behind occupying top half of frame. Classic TikTok reveal framing.'
+        },
+        editing: {
+          cuts: 'Freeze frame (2 sec) → beat drop → screen turns on (rapid zoom push) → quick cuts of WhatsApp messages sending → back to you talking. The reveal should feel like a superhero transformation.',
+          transitions: 'FREEZE → glitch transition on beat drop → screen reveal. Then rapid zoom cuts between screen and face. CapCut velocity edit for the freeze-to-motion transition.',
+          text: '"Allow me to reintroduce myself" text at top during freeze. Then "47 LEADS REPLIED" counter animation. "IN 4 SECONDS" flash. All in bold TikTok native font, slightly tilted.',
+          sound: 'Trending audio as base. Layer WhatsApp notification sounds rapid-fire (5-6 in 2 seconds) when screen turns on. ASMR-satisfying. The notification cascade is the dopamine hit.',
+          pacing: 'Freeze: 2 seconds of stillness (pattern interrupt — why is he not moving?). Beat drop: INSTANT chaos. Screen alive, messages flying, energy shift. Total hook: 5 seconds.'
+        }
+      },
+      { type:'main', title:'Main — What AIOS Actually Does', avatar:'Firaz (You)', avatarType:'real', duration:'5-50s',
+        description:'Walk through the 5 layers with screen demos',
+        script:`This is AIOS.\nAI Operating System.\n5 layers of intelligence wrapped around your business.\nLayer 1: Context.\nIt remembers everything about your clients.\nEvery conversation, every deal, every preference.\nLayer 2: Data.\nReal-time pipeline. Ask "which deals closing this week?" — answer in 2 seconds.\nLayer 3: Intelligence.\nIt scores your leads. Spots patterns you'd miss.\nLayer 4: Automate.\nWhatsApp blasts, follow-ups, scheduling — all on autopilot.\nLayer 5: Build.\nProposals, reports, documents — generated on demand.\n5 layers. No dashboard. No app.\nJust tell it what you need. In plain Malay or English.`,
+        music:'Building beat — each layer gets a subtle musical escalation',
+        keyPoints: ['5 layers: Context, Data, Intelligence, Automate, Build','No dashboard — conversational interface','Works in Malay and English'],
+        setDesign: {
+          location: 'Same desk setup but now with the actual AIOS terminal/interface visible',
+          lighting: 'Bright key light + monitor glow. Clean tech demo environment.',
+          props: 'Monitor showing actual AIOS commands running. Each layer demonstrated live. Terminal with real output. Maybe a second screen showing WhatsApp conversations.',
+          wardrobe: 'Same founder outfit.',
+          camera: 'Alternate between: face talking to camera → screen recording of each layer demo → back to face. 60/40 screen/face ratio.',
+          framing: 'Medium for talking. Tight on screen for demos. The viewer needs to SEE the interface working.'
+        },
+        editing: {
+          cuts: 'Each layer gets its own "chapter." Quick whoosh transition between layers.',
+          transitions: 'Numbered layer transitions: "01 CONTEXT" appears as a graphic, then cuts to demo. Each layer has a consistent intro graphic.',
+          text: 'Layer numbers (01-05) appear as large bold overlays. Key stats float in: "2 SECONDS", "24/7", "ON DEMAND".',
+          sound: 'Subtle "level up" sound for each layer transition. Typing sounds for terminal demos. WhatsApp sounds for automation layer.',
+          pacing: 'Medium-fast. Each layer gets 6-8 seconds. Don\'t linger — move with energy. The speed itself is impressive.'
+        }
+      },
+      { type:'cta', title:'CTA — Want This?', avatar:'Firaz (You)', avatarType:'real', duration:'50-60s',
+        description:'Drive to WhatsApp consultation',
+        script:`This is what replaces your RM5K/month hire.\nNo sick days. No drama. No forgetting.\nWhatsApp us for a free consultation.\nWe'll show you exactly what AIOS replaces in YOUR business.\nLink in bio. Or DM "AIOS."`,
+        music:'Confident close beat. Resolve.',
+        setDesign: {
+          location: 'Same workspace',
+          camera: 'Close-up. Direct. Personal.',
+          framing: 'Tight close-up for the comparison line. Pull back slightly for CTA.'
+        },
+        editing: {
+          text: '"RM5K/MONTH vs AIOS" comparison graphic. "FREE CONSULTATION" + "DM AIOS" end cards.',
+          pacing: 'Confident and measured. Let each line land.'
+        }
+      }
+    ]
+  },
+  {
+    day: 'Wednesday', title: 'STOP SCROLLING IF YOU RUN A BUSINESS', contentType: 'educate', contentTypeLabel: 'Educate',
+    totalDuration: '~45-60s',
+    sections: [
+      { type:'hook', title:'Hook — Brain Rot Split Screen: Staff vs AI Employee', avatar:'Firaz (You)', avatarType:'real', duration:'0-5s',
+        description:'Brain rot / sludge content format. Top half: you doing the comparison rant. Bottom half: Subway Surfers or satisfying slime video gameplay. Sounds unhinged but this format gets 2-3x retention because Gen Z literally cannot look away. The contrast between "serious business content" and "brain rot bottom half" IS the hook.',
+        script:`Stop scrolling if you run a business in Malaysia.\nRM5K a month.\n*red text flies in* FORGETS FOLLOW-UPS.\n*red* NEEDS TRAINING.\n*red* QUITS AFTER 3 MONTHS.\n*red* TAKES MC EVERY MONDAY.\nvs.\n*green text* NEVER FORGETS.\n*green* ALREADY TRAINED.\n*green* WORKS 24/7/365.\n*green* ZERO DRAMA.\nSame price.\nBro you tell me which one you're picking.`,
+        music:'Trending beat — something with a hard drop. Or use the "Stranger Things Believe Me" audio for dramatic narration energy. Each comparison line syncs to the beat.',
+        hookText:'Stop scrolling if you run a business in Malaysia',
+        tiktokFormat: 'Brain rot split screen (top: talking head, bottom: Subway Surfers/satisfying content). This format currently gets 2-3x watch time. The "stop scrolling if you\'re a [specific person]" opener is the #1 performing hook format right now. Combined with rapid red/green text comparison = dopamine overload.',
+        setDesign: {
+          location: 'Clean background — could even be your car, walking outside, or standing anywhere. The brain rot format doesn\'t need a fancy set — authenticity > production.',
+          lighting: 'Natural lighting. iPhone selfie quality. If anything, slightly WORSE quality feels more native to the format.',
+          props: 'None needed. Text overlays do all the work. Maybe hold up your phone showing a resignation letter or WhatsApp "Sorry boss, MC today" message as a prop for dramatic effect.',
+          wardrobe: 'Casual. This format works better when you DON\'T look polished. Plain tee or hoodie. The contrast between casual delivery and hard-hitting content is the vibe.',
+          camera: 'iPhone front camera selfie mode. Eye level. Slightly too close to face — like a rant you\'re filming in the moment. NOT a produced shot.',
+          framing: 'Top 60% of screen: your face talking. Bottom 40%: Subway Surfers gameplay or satisfying soap cutting video. Classic brain rot layout. Your face should be slightly off-center left.'
+        },
+        editing: {
+          cuts: 'Each comparison line = one beat. Red text flies in from left for "staff" problems. Green text flies in from right for "AI" wins. FAST alternation. Subway Surfers gameplay runs continuously on bottom half.',
+          transitions: 'Text slam-in animations. Each red line has a slight screen shake. Each green line has a subtle glow. The comparison should feel like a battle. Final "same price" line — both sides flash simultaneously.',
+          text: 'HUGE bold text dominating the screen. "FORGETS" in red with strike-through animation. "NEVER FORGETS" in green with glow. This is a TEXT-FIRST video — the text IS the content. Use CapCut bold impact font.',
+          sound: 'Each red line: buzzer/wrong answer sound. Each green line: cha-ching/correct sound. The auditory contrast is satisfying and creates a Pavlovian response. Subway Surfers sounds faintly underneath.',
+          pacing: 'INSANELY FAST. Each comparison = 1.5 seconds max. The viewer should barely be able to read one before the next hits. This creates re-watch value — they HAVE to watch again to catch everything. Total hook: 5 seconds.'
+        }
+      },
+      { type:'main', title:'Main — The Real Math', avatar:'Firaz (You)', avatarType:'real', duration:'5-40s',
+        description:'Break down the actual cost comparison with real numbers',
+        script:`Let me do the math for you.\nOne staff: RM4K salary. EPF, SOCSO, EIS — add RM800.\nTraining cost first month — basically paid to learn.\nProductivity? Maybe 60% after month 2.\nThen they quit. Start over.\nTotal cost first year: roughly RM60-70K.\nFor someone who works 8 hours, 5 days.\nAIOS: RM12K setup. Usage-based monthly.\nWorks 24 hours, 7 days.\nNever quits. Never forgets. Gets smarter every day.\nFirst year total: fraction of one hire.\nAnd it replaces 3-4 roles, not just one.\nThis isn't about replacing people.\nIt's about not needing to hire for things a system can do better.`,
+        music:'Confident teaching beat. Numbers-focused energy.',
+        keyPoints: ['Real staff cost = RM60-70K/year all-in','AIOS = RM12K setup + usage < one hire','Replaces 3-4 roles: sales, admin, ops, follow-up'],
+        setDesign: {
+          location: 'Workspace with whiteboard or large monitor showing the math',
+          lighting: 'Bright, professional. The "let me educate you" environment.',
+          props: 'Whiteboard with actual calculations written out. Or iPad/tablet showing a clean comparison graphic. Calculator for dramatic effect.',
+          wardrobe: 'Full outfit.',
+          camera: 'Start medium on you. Cut to whiteboard for math. Back to you for key insights. Over-shoulder angles for variety.',
+          framing: 'Mix of talking head and educational B-roll of the numbers. Like a mini-presentation.'
+        },
+        editing: {
+          cuts: 'Face → whiteboard → face → whiteboard. Methodical. Let the math build.',
+          transitions: 'Smooth zooms into specific numbers. Draw/underline animation on key figures.',
+          text: 'Running cost tracker in corner that adds up as you speak. "RM4,000 + RM800 + RM4,000..." Final number in bold. Comparison bar chart at the end.',
+          sound: 'Calculator keystroke sounds. Cash register for totals. Subtle "ding" when AIOS number revealed.',
+          pacing: 'Medium pace. Let the numbers sink in. Pause before the AIOS reveal for contrast.'
+        }
+      },
+      { type:'cta', title:'CTA — The No-Brainer', avatar:'Firaz (You)', avatarType:'real', duration:'40-50s',
+        description:'Make it feel like a no-brainer decision',
+        script:`The math doesn't lie.\nIf you're spending RM60K+ a year on admin and follow-ups,\nyou're overpaying for something AI does better.\nFree consultation — link in bio.\nWe'll map out exactly what AIOS saves you.\nDM "MATH" if the numbers got you thinking.`,
+        music:'Resolved beat. Confident close.',
+        setDesign: {
+          camera: 'Close-up. Lean in. The "just between us" energy.',
+          framing: 'Tight. Personal. Like giving business advice to a friend.'
+        },
+        editing: {
+          text: '"RM60K vs AIOS" final comparison card. "FREE CONSULTATION" end card. "DM MATH" CTA.',
+          pacing: 'Deliberate. Confident. Not rushed. The math already did the selling.'
+        }
+      }
+    ]
+  },
+  {
+    day: 'Thursday', title: 'I BET YOU DIDN\'T KNOW THIS ABOUT WHATSAPP', contentType: 'demo', contentTypeLabel: 'Demo',
+    totalDuration: '~60-90s',
+    sections: [
+      { type:'hook', title:'Hook — "I bet you didn\'t know you could do this on WhatsApp"', avatar:'Firaz (You)', avatarType:'real', duration:'0-5s',
+        description:'Curiosity gap hook + live ASMR-satisfying demo. "I bet you didn\'t know" is a top-3 hook format right now. Combined with the ASMR of rapid-fire WhatsApp notifications — this is engineered dopamine. The sound design IS the hook.',
+        script:`I bet you didn't know you could do this on WhatsApp.\n*dead silence*\n*types one command*\n*500 WhatsApp notification sounds in 4 seconds*\n500 personalized messages.\n4 seconds.\nEach one has their name, their last chat, their interest.\nYour intern: 3 hari bro.`,
+        music:'SILENCE for first 3 seconds. Just keyboard ASMR clicks. Then 500 rapid-fire WhatsApp notification sounds cascading (the satisfying part). THEN the beat drops. The silence-to-chaos contrast is the hook.',
+        hookText:'I bet you didn\'t know you could do this on WhatsApp',
+        tiktokFormat: '"I bet you didn\'t know" curiosity gap + ASMR satisfaction + live demo. The WhatsApp notification cascade sound is designed to be addictively satisfying — like those "soap cutting" or "sand kinetic" ASMR videos but for business. People will replay just to hear the notifications again.',
+        setDesign: {
+          location: 'Desk setup — but make it aesthetic. Clean desk, monitor, nice lighting. The "tech aesthetic" desk setup that gets saved.',
+          lighting: 'Monitor glow as primary light source. One warm lamp behind. Slightly dark — the screen is the star. The glow on your face from the monitor = cinematic tech vibes.',
+          props: 'Monitor showing terminal/AIOS. Second phone propped up showing WhatsApp messages arriving in real-time as the blast sends. The phone should be VISIBLE getting flooded with delivered messages. Satisfying.',
+          wardrobe: 'Founder fit. But sit slightly hunched toward the screen like you\'re about to do something crazy. The "watch this" energy.',
+          camera: 'Over-shoulder tight on screen for the command. Quick whip-pan to second phone getting flooded. Then face reaction (smirk). The demo sequence should feel like a magic trick reveal.',
+          framing: 'Screen dominant first 3 seconds. Then your face takes over. The "are you seeing this??" energy. Close-up on the phone notification flood is KEY — that\'s the money shot.'
+        },
+        editing: {
+          cuts: 'Face (1 sec "watch this") → keyboard close-up → screen showing command → PHONE GETTING FLOODED (the star moment) → face smirk → comparison text. The phone notification flood needs at least 2 seconds of screen time — it\'s the satisfying payoff.',
+          transitions: 'Zoom-push into screen on the command. Velocity edit (slow-mo → speed up) on the notification flood. Glitch cut to your smirk.',
+          text: 'Counter animation: "0... 100... 250... 500" counting up FAST in large bold numbers. Then "4 SECONDS" freezes. Cut to: "Your intern: 3 hari" in a smaller, sadder font. The font contrast is funny.',
+          sound: 'THIS IS AN ASMR VIDEO IN DISGUISE. Keyboard clicks (mechanical keyboard if possible). Then the rapid-fire WhatsApp "delivered" sounds cascading — start slow, accelerate to absurd speed. This sound design will make people replay. Layer subtle bass under the notification cascade.',
+          pacing: 'Slow start (curiosity builds). Command typed (tension). Then EXPLOSION of notifications (dopamine). Instant contrast with "your intern: 3 hari" (humor). 5 seconds total. Engineered for replay.'
+        }
+      },
+      { type:'main', title:'Main — How WhatsApp Automation Actually Works', avatar:'Firaz (You)', avatarType:'real', duration:'5-50s',
+        description:'Walk through the WhatsApp blast system step by step',
+        script:`Let me show you how this actually works.\nStep 1: Your contacts are in the system.\nEvery lead that ever messaged you — tagged, scored, organized.\nStep 2: You write one message. Or ask AI to write it.\n"Write a follow-up for cold leads from last month"\n— done. Personalized template in 10 seconds.\nStep 3: Select your audience.\n"All leads tagged 'property' who haven't replied in 30 days."\nStep 4: Send.\nNot spam. Not generic blast.\nEach message has their name, their last interaction, their interest.\nThat's why the open rate is insane.\nBecause it doesn't feel like a blast.\nIt feels like you personally typed it.\nBut you didn't. The AI did. In 4 seconds.`,
+        music:'Building electronic. Each step escalates.',
+        keyPoints: ['Contacts auto-tagged and scored','AI writes personalized messages','Feels personal at scale — that\'s why it converts'],
+        setDesign: {
+          location: 'Same desk setup. Screen recording is primary content.',
+          lighting: 'Same tech demo environment.',
+          props: 'Screen showing: contact database → message composer → audience selector → send confirmation. Real AIOS interface.',
+          camera: 'Screen recording with face cam overlay in corner. Or: alternate between screen and you explaining each step.',
+          framing: 'Screen dominant for the demo. Cut to you for the insight/commentary.'
+        },
+        editing: {
+          cuts: 'Step-by-step progression. Each step gets a numbered graphic intro.',
+          transitions: '"STEP 1" → zoom into relevant screen area. "STEP 2" → wipe to message composer. Clean numbered progression.',
+          text: 'Step numbers prominent. Key features highlighted on screen with arrows/circles. "PERSONALIZED" callout on the message preview.',
+          sound: 'Subtle UI sounds for each step. Typing for message compose. "Sent" sound for the blast.',
+          pacing: 'Medium. Each step gets 8-10 seconds. Let the viewer understand before moving on. The final send should feel cathartic.'
+        }
+      },
+      { type:'cta', title:'CTA — Want Your Own Blast System', avatar:'Firaz (You)', avatarType:'real', duration:'50-60s',
+        description:'Drive to the WhatsApp Blaster product specifically',
+        script:`This is our AI WhatsApp Blaster.\nRM5K setup. Usage-based after.\nMost clients make that back in the first week.\nBecause one follow-up blast to your dead leads?\nThat alone closes 3-5 deals you forgot about.\nDM "BLAST" or link in bio.\nFree consultation. We'll blast your first campaign together.`,
+        music:'Confident resolve.',
+        setDesign: {
+          camera: 'Direct to camera. Confident energy. Show pricing casually — not salesy.',
+          framing: 'Medium close-up.'
+        },
+        editing: {
+          text: '"RM5K SETUP" price reveal. "FIRST WEEK ROI" callout. "DM BLAST" end card.',
+          pacing: 'Confident, not rushed. The demo already sold. This is just the logistics.'
+        }
+      }
+    ]
+  },
+  {
+    day: 'Friday', title: 'NOBODY ASKED BUT 460K CONTACTS', contentType: 'proof', contentTypeLabel: 'Social Proof',
+    totalDuration: '~45-60s',
+    sections: [
+      { type:'hook', title:'Hook — "Nobody asked but here\'s what 460K contacts looks like"', avatar:'Firaz (You)', avatarType:'real', duration:'0-5s',
+        description:'"Nobody asked but" format + flex + Charli XCX "Boom Clap" text reveal energy. Start with humble-brag text, then hit them with the absurd numbers. The "nobody asked" format is Gen Z self-aware humor that disarms the flex. Instead of bragging directly, you acknowledge nobody asked — which makes the flex MORE impressive.',
+        script:`Nobody asked but here's what 460,000 contacts\nmanaged by AI looks like.\n*shows dashboard*\n500+ Malaysian businesses.\nProperty. Beauty. F&B. Clinics.\nAll on WhatsApp.\nAll automated.\nAll running right now while their owners sleep.\nNobody asked.\nBut now you know.`,
+        music:'Charli XCX "Boom Clap" instrumental — or any trending audio with a build-to-reveal structure. The numbers should sync to beat hits. Each stat = one beat.',
+        hookText:'Nobody asked but here\'s what 460K contacts managed by AI looks like',
+        tiktokFormat: '"Nobody asked but" humble-brag format. Currently viral because it\'s self-aware — Gen Z hates obvious flexing but LOVES when you acknowledge the flex while doing it. Combined with the Boom Clap text reveal trend where you show text statements that build to a punchline. The numbers ARE the flex — let them speak.',
+        setDesign: {
+          location: 'Walking and talking. NOT sitting at a desk. Walk through your workspace, or walk outside in KL — the movement adds energy. Or: car content (talking in your car is peak Gen Z casual).',
+          lighting: 'Natural. Car interior lighting or outdoor Malaysian daylight. The "I just got in my car and needed to tell you this" energy.',
+          props: 'Phone showing actual AIOS dashboard with the numbers. Quick flash of the real data. Then back to face. The authenticity of showing REAL numbers > graphics.',
+          wardrobe: 'Full fit but this should feel like you just decided to film this. Sunglasses on if in car. The flex should feel effortless, not staged.',
+          camera: 'Front camera selfie. Handheld. If car content: phone in cup holder or hand-held. Slightly shaky = authentic. The raw phone camera quality IS the aesthetic.',
+          framing: 'Close-up face. Off-center (TikTok native). When showing dashboard, hold phone up to camera — shaky, imperfect, real. Not a screen recording — a PHONE FILMING A PHONE.'
+        },
+        editing: {
+          cuts: 'Face → phone screen flash (1 sec) → face → number overlay → face. Each number gets its own beat-synced cut.',
+          transitions: 'Text reveals synced to Boom Clap beats. Each number slams in. Counter animations for the big numbers (0 → 460,000 in 1.5 seconds). Zoom-push on "right now while their owners sleep."',
+          text: '"nobody asked but" in small casual lowercase font at top (self-aware energy). Then HUGE bold numbers slam in: "460,000" "500+" "24/7". The contrast between the humble opener and the massive numbers = comedy + flex.',
+          sound: 'Beat-synced number reveals. Each stat gets a bass hit. Counter-clicking sound for the 460K count-up. End with a satisfying "ding" on "now you know." The audio should make this feel like an achievement unlocked.',
+          pacing: 'Medium-fast. Let each number land but don\'t linger. "Nobody asked" opener should be QUICK and throwaway. Then the numbers hit rapid-fire. End slow on "now you know" for emphasis.'
+        }
+      },
+      { type:'main', title:'Main — How Malaysian Businesses Use AIOS', avatar:'Firaz (You)', avatarType:'real', duration:'5-40s',
+        description:'Walk through real use cases by industry',
+        script:`Let me tell you what 460K contacts actually looks like.\nProperty agent in Bangsar.\n200 leads a month from Facebook ads.\nBefore AIOS: 30% get follow-up. Maybe.\nAfter: 100%. Every single lead. Within 4 seconds.\nClose rate went from 3% to 11%.\nBeauty salon in Subang.\n50 bookings a week managed by WhatsApp.\nBefore: missed appointments, no-shows, chaos.\nAfter: automated reminders, rebooking, review requests.\nNo-show rate dropped 60%.\nF&B chain in KL.\n3 outlets. Different menus. Promotions every week.\nBefore: one poor marketing exec copy-pasting.\nAfter: one command. Blast to 5,000 customers. Segmented by location.\nThis isn't theoretical.\nThis is running right now. Today. In Malaysia.`,
+        music:'Building confident beat. Each case study gets energy.',
+        keyPoints: ['Property: 3% → 11% close rate with instant follow-up','Beauty: 60% fewer no-shows with auto-reminders','F&B: 5K segmented blasts replace manual copy-paste'],
+        setDesign: {
+          location: 'Workspace. Maybe standing with a presentation behind — more "keynote" energy.',
+          lighting: 'Bright, professional. Credibility environment.',
+          props: 'Screen showing anonymized case study results. Bar charts, before/after numbers. Industry logos or icons.',
+          wardrobe: 'Full outfit. Sharp.',
+          camera: 'Mix of direct-to-camera and B-roll of screen showing results. Dynamic angles — not just sitting.',
+          framing: 'Standing medium shot for authority. Cut to screen for numbers. Close-up for emotional lines.'
+        },
+        editing: {
+          cuts: 'Face → result graphic → face → result graphic. Each industry gets its own mini-segment.',
+          transitions: 'Industry icon/name appears as a graphic card between each case study. Slide-in transitions.',
+          text: 'Before/After comparison graphics for each case study. Percentage improvements highlighted in green. Industry labels.',
+          sound: 'Subtle "whoosh" between case studies. Positive chime for each "after" stat.',
+          pacing: 'Each case study = 10 seconds max. Don\'t drag. The viewer should feel the momentum of success after success.'
+        }
+      },
+      { type:'cta', title:'CTA — Your Industry', avatar:'Firaz (You)', avatarType:'real', duration:'40-50s',
+        description:'Personalize to viewer\'s industry',
+        script:`Whatever industry you're in.\nIf your customers are on WhatsApp — and they are —\nAIOS works for you.\nDM me your industry.\nI'll tell you exactly what AIOS replaces in your business.\nNo fluff. Real numbers.\nLink in bio for free consultation.`,
+        music:'Confident close.',
+        setDesign: {
+          camera: 'Direct close-up. Personal invitation energy.',
+          framing: 'Tight. Like you\'re talking to ONE person.'
+        },
+        editing: {
+          text: '"DM YOUR INDUSTRY" CTA. List of industries scrolling in background. "FREE CONSULTATION" end card.',
+          pacing: 'Measured. Inviting. Not pushy. The case studies already sold.'
+        }
+      }
+    ]
+  },
+  {
+    day: 'Saturday', title: '3AM AND I\'M STILL BUILDING', contentType: 'engage', contentTypeLabel: 'Engage',
+    totalDuration: '~60-90s',
+    sections: [
+      { type:'hook', title:'Hook — "3am and I\'m still building" (raw founder content)', avatar:'Firaz (You)', avatarType:'real', duration:'0-5s',
+        description:'Anti-polished content. The #1 trend in 2026 is authenticity > curation. Raw, unfiltered BTS content performs 60% better than produced content. This is the "real founder life" genre that\'s exploding on TikTok — messy desk, dark room, code on screen, vulnerability. The CONTRAST from your usual confident energy makes this hit harder. It\'s a pattern interrupt within your own content series.',
+        script:`*camera picks up mid-thought, like you just grabbed your phone*\n3:14am and I'm still here.\nNo team. No funding. No investors.\nJust me and Claude building an AI system\nthat 500 businesses depend on.\nThis is the part they don't show you.\nThe part where you question everything.\nBut then a client messages:\n"Bro AIOS just closed a deal for me while I was sleeping."\nAnd you keep going.\nAnway that's the update. Back to work.`,
+        music:'No music OR barely-there lo-fi ambient. The silence IS the vibe. If using audio, use the "I had one more thing to say" conversational restart audio — it feels like a late-night voice note to a friend.',
+        hookText:'3:14am. No team. No funding. Still building.',
+        tiktokFormat: 'Raw founder / "day in the life" format. This is the SLOW video that breaks the pattern. While every other video is fast cuts and loud beats, this one is quiet, intimate, and real. The contrast = scroll-stopper. Authenticity content gets 60% more engagement than polished content. This format gets SAVED — people screenshot "founder grind" content.',
+        setDesign: {
+          location: 'ACTUAL workspace at 3am. Do NOT stage this. Film it when you\'re actually working late. The mess is the point — it signals authenticity. Empty mamak tapau containers, multiple coffee cups, cables everywhere.',
+          lighting: 'Monitor glow ONLY. Maybe one warm lamp creating shadows. Cool blue from screen + warm amber from lamp = the 3am color palette. The viewer should FEEL the tiredness.',
+          props: 'Real props only: actual code on screen, actual terminal running, actual coffee cups (multiple = been here for hours), actual snack wrappers, phone charging cable, sticky notes. A client WhatsApp message visible on phone ("Bro AIOS just closed a deal"). Everything should look USED and LIVED-IN.',
+          wardrobe: 'Hoodie. No cap. Glasses on if you wear them. Hair messy. The anti-founder-fit. This should be the exact opposite of how you look in every other video.',
+          camera: 'Handheld. SHAKY. Like you literally just picked up your phone between coding sessions. Start mid-sentence — don\'t open formally. End abruptly — "anyway back to work." The rawness is the brand.',
+          framing: 'Close-up face lit by monitor. Then show the code briefly. Then back to face. The viewer is INSIDE your 3am. Intimate, not cinematic.'
+        },
+        editing: {
+          cuts: 'SLOW. Intentionally slow. 3-5 seconds per shot. Clock showing 3:14am → face → code on screen → coffee cups → phone with client message → back to face. Let each shot breathe.',
+          transitions: 'Slow crossfades only. Maybe one time-lapse of code changing on screen. No flashy transitions. The editing should feel like it was done at 3am too.',
+          text: '"3:14 AM" timestamp in corner — small, subtle, like iPhone camera timestamp. Maybe one line: "no team. no funding. still building." in lowercase. Keep text MINIMAL. The rawness speaks.',
+          sound: 'Keyboard clicks (real). Room tone / AC hum. Maybe rain ambience if you have it. Lo-fi beat at 10% volume — barely audible. The ASMR of someone working alone at night. If you use music, the Rihanna "Kiss It Better" emotional yearning trend works for the reflective vibe.',
+          pacing: 'DELIBERATELY SLOW. This is the palette cleanser in your content week. While Mon-Fri is fast and punchy, Saturday is slow and real. The contrast makes both hit harder. End abruptly — "back to work" + hard cut to black.'
+        }
+      },
+      { type:'main', title:'Main — Why I Built This', avatar:'Firaz (You)', avatarType:'real', duration:'5-50s',
+        description:'Personal story — the founder narrative',
+        script:`Let me tell you why I built AIOS.\nI watched Malaysian businesses struggle with the same thing.\nHire someone. Train them. They leave.\nHire again. Train again. They leave again.\nEvery cycle costs RM20-30K when you add it all up.\nAnd the whole time, leads are falling through cracks.\nI thought — what if there was a system that just... didn't forget?\nNot a chatbot. Not a CRM you never log into.\nAn actual AI co-founder that knows your business.\nThat remembers your clients better than you do.\nThat follows up while you sleep.\nThat generates proposals while you're in meetings.\nSo I built it.\nNot in Silicon Valley. Not with VC money.\nIn Malaysia. For Malaysian businesses.\nBecause our market deserves tools built for how we actually work.\nWhatsApp-first. Bahasa and English. No BS.`,
+        music:'Emotional piano. Building. The founder story beat.',
+        keyPoints: ['Built from frustration watching businesses lose money on staff turnover','Not a chatbot — an AI co-founder','Malaysian-built for Malaysian market — WhatsApp-first'],
+        setDesign: {
+          location: 'Mix of locations: late-night desk → morning coffee → meeting room → back to desk. Show the journey.',
+          lighting: 'Varies with location. Night scenes dark. Morning scenes warm. The visual journey mirrors the story.',
+          props: 'Code on screen (early), whiteboard with AIOS architecture (middle), happy client WhatsApp messages (end). The progression from idea to product.',
+          wardrobe: 'Start casual (3am build), transition to founder outfit (present day). The glow-up is subtle.',
+          camera: 'Mix: handheld intimate moments + stabilized talking head for key message lines. The contrast between raw and polished.',
+          framing: 'Start tight (personal), go wider as the story gets bigger (the mission). End medium — confident but vulnerable.'
+        },
+        editing: {
+          cuts: 'Story-driven. Let clips breathe. This is a narrative, not a rapid-fire.',
+          transitions: 'Time progression montage for the build journey. Crossfades. Slow motion for emotional beats.',
+          text: 'Minimal text. Maybe one line: "Built in Malaysia. For Malaysia." Let the story carry.',
+          sound: 'Piano builds throughout. Maybe one bass drop for the resolve. Keep it emotional.',
+          pacing: 'This is the SLOW video of the week. Let it breathe. 4-5 seconds per clip. The viewer should FEEL the journey.'
+        }
+      },
+      { type:'cta', title:'CTA — Join the Movement', avatar:'Firaz (You)', avatarType:'real', duration:'50-65s',
+        description:'Community + mission CTA',
+        script:`If you're a Malaysian business owner watching this.\nI built this for you.\nNot for corporations. Not for Silicon Valley startups.\nFor the guy running a property agency from his phone.\nFor the salon owner managing bookings in WhatsApp groups.\nFor the F&B chain that can't afford a full marketing team.\nThis is for you.\nDM "BUILD" or link in bio.\nLet's see what AIOS can do for your business.`,
+        music:'Piano resolves. Hopeful. Warm.',
+        setDesign: {
+          location: 'Back to clean workspace. Present day. The founder who made it.',
+          lighting: 'Warm, natural. The sunrise after the 3am session metaphor.',
+          camera: 'Close-up. Direct. Genuine.',
+          framing: 'Tight. Personal. You\'re speaking to ONE business owner.'
+        },
+        editing: {
+          text: '"FOR MALAYSIAN BUSINESSES" — one strong graphic. "DM BUILD" + "LINK IN BIO" end cards.',
+          pacing: 'Slow and genuine. Each line addressed to a specific viewer. Not a mass CTA — a personal invitation.'
+        }
+      }
+    ]
+  },
+  {
+    day: 'Sunday', title: 'DO YOU ACTUALLY WANT TO GROW OR NOT', contentType: 'community', contentTypeLabel: 'Community',
+    totalDuration: '~45-60s',
+    sections: [
+      { type:'hook', title:'Hook — "Do you actually want to grow your business or not" (sarcastic recap)', avatar:'Firaz (You)', avatarType:'real', duration:'0-5s',
+        description:'"Do you actually want to do this or not" trending sarcastic audio format. You\'re scolding the viewer (lovingly) for not watching the whole week. This format works because Gen Z LOVES being called out — it creates an "oh no he\'s talking about ME" moment. Combined with reality show trailer editing — rapid clips from the week cut like a Netflix season recap.',
+        script:`Do you actually want to grow your business or not?\nBecause this week I literally showed you:\n*rapid clip* How you lose RM10K every night.\n*rapid clip* An AI employee that replies in 4 seconds.\n*rapid clip* Why RM5K staff < RM5K AI.\n*rapid clip* 500 WhatsApp messages in 4 seconds.\n*rapid clip* 460K contacts. Real data.\n*rapid clip* Me building this at 3am for you.\nAnd you didn't follow?\nWallahi this is a you problem.`,
+        music:'Use the "Do you actually want to do this or not?" trending audio as the opener. Then switch to high-energy montage beat for the clips. Each clip synced to beat hits. End with a comedic silence after "this is a you problem."',
+        hookText:'Do you actually want to grow your business or not?',
+        tiktokFormat: 'Sarcastic call-out + reality show trailer recap. The "do you actually want to" audio is trending for scolding/motivation content. Combined with Netflix-style "previously on..." rapid montage editing. Each clip from the week gets 0.5-1 second. The speed makes it feel EPIC. Ends with Gen Z humor ("wallahi this is a you problem") to keep it light.',
+        setDesign: {
+          location: 'Direct to camera — anywhere. Car, walking, desk. The scolding energy is location-independent.',
+          lighting: 'Whatever matches the energy — bright and confrontational works. Or car lighting for the "I\'m in my car ranting" genre.',
+          props: 'Phone showing clips from the week. Or just rely on edit — the clips from Mon-Sat are your props.',
+          wardrobe: 'Full founder fit. Sunday best. This is the "season finale" so look sharp.',
+          camera: 'Front camera. Close-up. Direct eye contact. The "I\'m talking to YOU specifically" energy. Lean toward camera for the scolding lines.',
+          framing: 'Ultra tight on face for the scolding. Then rapid clips fill the frame. Then back to your face for the "you problem" punchline.'
+        },
+        editing: {
+          cuts: 'YOUR FACE (scolding) → Mon clip (0.5s) → YOUR FACE → Tue clip (0.5s) → repeat for each day. The alternation between your scolding face and the clips creates rhythm. Like a reality show "previously on" but faster.',
+          transitions: 'Flash/strobe transitions between clips. Each day\'s clip has a slight zoom-push. Whip-pans between your face and clips. CapCut velocity for the rapid-fire section. End with hard cut to silence after the punchline.',
+          text: '"MON" "TUE" "WED" "THU" "FRI" "SAT" labels flash with each clip — large, bold, white. Each one gets progressively bigger. "this is a you problem" appears as final text in small lowercase — the contrast is funny.',
+          sound: 'Trending scolding audio first 2 seconds. Then HARD beat drops for montage. Each clip gets a bass hit + whoosh. Rapid-fire energy. After the last clip: dead silence for 1 second. Then the punchline. The silence is the comedic timing.',
+          pacing: 'Fast-medium-fast. Scolding opener (2 sec) → RAPID montage (3 sec, six clips) → pause → punchline. The montage should feel like a trailer for a show you NEED to binge. End with humor to lower guard before the CTA main section.'
+        }
+      },
+      { type:'main', title:'Main — Answering Top Questions', avatar:'Firaz (You)', avatarType:'real', duration:'5-40s',
+        description:'Address real DM questions from the week',
+        script:`Top question this week:\n"Is this just a chatbot?"\nNo. A chatbot follows a script.\nAIOS understands your business.\nIt queries your database. It generates documents.\nIt scores your leads and tells you who to call first.\nA chatbot says "thank you for your message."\nAIOS says "you have 3 deals worth RM42K closing this week — here's who to follow up first."\nBig difference.\n\nSecond question:\n"What if my data gets leaked?"\nYour data runs on YOUR server.\nNot our platform. Not a shared database.\nYour data. Your control. Full ownership.\nWe just make it work smarter.\n\n"How fast can I start?"\n3-5 days. We handle the setup.\nYou focus on your business.`,
+        music:'Conversational beat. Q&A energy.',
+        keyPoints: ['Not a chatbot — understands and queries your business','Your data on YOUR server — full ownership','3-5 days to go live'],
+        setDesign: {
+          location: 'Casual setting. More relaxed Sunday energy. Maybe standing, more conversational.',
+          lighting: 'Natural, warm. Weekend vibes but still professional.',
+          props: 'Phone showing actual DM questions (screenshot). Or just speak them naturally.',
+          wardrobe: 'Full outfit but maybe no vest — slightly more casual for Sunday.',
+          camera: 'More conversational angles. Not strictly talking head. Maybe walking and talking. Outdoor even.',
+          framing: 'Medium. Relaxed. Like a friend answering your questions.'
+        },
+        editing: {
+          cuts: 'Question → answer → question → answer. Clean segments.',
+          transitions: 'Question text appears as a graphic card before each answer. Clean blue/grey card design.',
+          text: 'Each question displayed as a "viewer message" graphic. Answers reinforced with key words highlighted.',
+          sound: 'Subtle notification sound before each question. Conversational beat throughout.',
+          pacing: 'Medium. Conversational. Each Q&A takes 10-12 seconds. Don\'t rush — people with real questions are watching closely.'
+        }
+      },
+      { type:'cta', title:'CTA — Week 2 Tease + Big Push', avatar:'Firaz (You)', avatarType:'real', duration:'40-55s',
+        description:'Tease next week + strongest CTA of the week',
+        script:`Next week: I'm going to build an AI employee for a business LIVE on camera.\nFrom zero to working in 5 days.\nYou'll see everything.\nFollow so you don't miss it.\n\nAnd if you've been watching all week thinking "I need this" —\nstop thinking. Start doing.\nWhatsApp us. Link in bio.\nFree consultation. No hard sell.\nJust a conversation about what AI can replace in your business.\nI'm Firaz. This is AIOS.\nSee you next week.`,
+        music:'Build to emotional close. Piano + beat. The "end of chapter 1" energy.',
+        setDesign: {
+          location: 'Best angle of workspace. Cinematic close.',
+          lighting: 'Warm. Golden. The "promise of what\'s next" light.',
+          camera: 'Start medium. Slowly zoom in. End on tight close-up for "see you next week."',
+          framing: 'Cinematic. The ending shot should feel like a movie outro.'
+        },
+        editing: {
+          text: '"NEXT WEEK: LIVE BUILD" tease graphic. "FREE CONSULTATION" + "LINK IN BIO" + "DM AIOS" end card sequence.',
+          pacing: 'Build slowly. Tease creates anticipation. CTA is confident, not desperate. Close is personal.',
+          sound: 'Music builds to crescendo on the tease. Resolves warmly on the close. Clean out.'
+        }
+      }
+    ]
+  }
+];
+
+
+// ═══════════════════════════════════════════════
+//  PRODUCT: PAID ADS (placeholder)
+// ═══════════════════════════════════════════════
+const PAID_ADS_PLAN = [
+  { day:'Monday', title:'COMING SOON', contentType:'educate', contentTypeLabel:'Educate', totalDuration:'—', sections:[
+    { type:'main', title:'Paid Ads Content — Coming Soon', avatar:'Firaz (You)', avatarType:'real', duration:'—', description:'Paid Ads Solutions content plan will be generated here.', script:'Content plan for Paid Ads Solutions product coming soon.\nThis will cover Facebook Ads, TikTok Ads, and Google Ads content.', music:'—' }
+  ]},
+  { day:'Tuesday', title:'COMING SOON', contentType:'educate', contentTypeLabel:'Educate', totalDuration:'—', sections:[{ type:'main', title:'Coming Soon', avatar:'—', avatarType:'real', duration:'—', description:'—', script:'Coming soon.', music:'—' }]},
+  { day:'Wednesday', title:'COMING SOON', contentType:'educate', contentTypeLabel:'Educate', totalDuration:'—', sections:[{ type:'main', title:'Coming Soon', avatar:'—', avatarType:'real', duration:'—', description:'—', script:'Coming soon.', music:'—' }]},
+  { day:'Thursday', title:'COMING SOON', contentType:'educate', contentTypeLabel:'Educate', totalDuration:'—', sections:[{ type:'main', title:'Coming Soon', avatar:'—', avatarType:'real', duration:'—', description:'—', script:'Coming soon.', music:'—' }]},
+  { day:'Friday', title:'COMING SOON', contentType:'educate', contentTypeLabel:'Educate', totalDuration:'—', sections:[{ type:'main', title:'Coming Soon', avatar:'—', avatarType:'real', duration:'—', description:'—', script:'Coming soon.', music:'—' }]},
+  { day:'Saturday', title:'COMING SOON', contentType:'educate', contentTypeLabel:'Educate', totalDuration:'—', sections:[{ type:'main', title:'Coming Soon', avatar:'—', avatarType:'real', duration:'—', description:'—', script:'Coming soon.', music:'—' }]},
+  { day:'Sunday', title:'COMING SOON', contentType:'educate', contentTypeLabel:'Educate', totalDuration:'—', sections:[{ type:'main', title:'Coming Soon', avatar:'—', avatarType:'real', duration:'—', description:'—', script:'Coming soon.', music:'—' }]}
+];
+
+const PRODUCTS = {
+  'ai-video': { plan: AI_VIDEO_PLAN, eyebrow: 'AI Video Content Lab', title: 'AI Video <span class="hero-title-accent">Plan</span>', subtitle: 'UGC avatars hook the audience. You deliver the value. Full video plans with scripts, prompts, and production notes.' },
+  'ai-employee': { plan: AI_EMPLOYEE_PLAN, eyebrow: 'AIOS — AI Employee Content', title: 'AIOS <span class="hero-title-accent">Content Plan</span>', subtitle: 'Real shoots. Real you. Scripts, set design, editing guides, and transitions for every video section.' },
+  'paid-ads': { plan: PAID_ADS_PLAN, eyebrow: 'Paid Ads Solutions Content', title: 'Paid Ads <span class="hero-title-accent">Plan</span>', subtitle: 'Content plan for Paid Ads Solutions — coming soon.' }
+};
+
+// ── State ──
+let activeProduct = 'ai-video';
+let activeDay = 0;
+let openSections = {};
+
+function getWeekStartDate() {
+  const stored = localStorage.getItem('contentPlanV2StartDate');
+  if (stored) return new Date(stored);
+  const today = new Date(); const dow = today.getDay();
+  const diff = dow === 0 ? 1 : (dow === 1 ? 0 : 8 - dow);
+  const mon = new Date(today); mon.setDate(today.getDate() + diff); mon.setHours(0,0,0,0);
+  localStorage.setItem('contentPlanV2StartDate', mon.toISOString());
+  return mon;
+}
+function formatDate(d) { const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; const w=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; return `${w[d.getDay()]}, ${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear()}`; }
+function getDayStatus(i) { const ws=getWeekStartDate(); const dd=new Date(ws); dd.setDate(ws.getDate()+i); const t=new Date(); t.setHours(0,0,0,0); dd.setHours(0,0,0,0); if(dd.getTime()===t.getTime()) return 'today'; return dd<t?'past':'upcoming'; }
+function getTodayIndex() { const ws=getWeekStartDate(); const t=new Date(); t.setHours(0,0,0,0); const s=new Date(ws); s.setHours(0,0,0,0); const d=Math.floor((t-s)/(864e5)); if(d>=0&&d<7) return d; return d<0?0:6; }
+
+function switchProduct(product) {
+  activeProduct = product;
+  activeDay = getTodayIndex();
+  openSections = {};
+  document.querySelectorAll('.product-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`[onclick="switchProduct('${product}')"]`).classList.add('active');
+  const p = PRODUCTS[product];
+  document.getElementById('heroEyebrow').innerHTML = `<span class="eyebrow-dot"></span>${p.eyebrow}`;
+  document.getElementById('heroTitle').innerHTML = p.title;
+  document.getElementById('heroSubtitle').textContent = p.subtitle;
+  render();
+}
+
+function toggleSection(dayIdx, secIdx) {
+  const key = `${activeProduct}-${dayIdx}-${secIdx}`;
+  openSections[key] = !openSections[key];
+  render();
+}
+
+function render() {
+  const plan = PRODUCTS[activeProduct].plan;
+  document.getElementById('topDate').innerHTML = `<strong>${formatDate(new Date())}</strong>`;
+
+  // Week strip
+  const weekEl = document.getElementById('weekOverview');
+  const ws = getWeekStartDate();
+  const dn = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  weekEl.innerHTML = '';
+  for(let i=0;i<7;i++){
+    const d=new Date(ws); d.setDate(ws.getDate()+i);
+    const st=getDayStatus(i);
+    const dot=document.createElement('div');
+    dot.className=`week-dot ${st} ${i===activeDay?'active':''}`;
+    dot.onclick=()=>{activeDay=i;openSections={};render();};
+    dot.innerHTML=`<div class="dot-day">${dn[i]}</div><div class="dot-num">${d.getDate()}</div><div class="dot-status"></div>`;
+    weekEl.appendChild(dot);
+  }
+
+  const container = document.getElementById('cardsContainer');
+  const c = plan[activeDay];
+  const st = getDayStatus(activeDay);
+  const sl = st==='today'?'Today':st==='past'?'Done':'Upcoming';
+
+  const icons = {
+    educate:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>',
+    engage:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>',
+    proof:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+    community:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    pain:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    demo:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>'
+  };
+
+  let sectionsHTML = '';
+  c.sections.forEach((sec, si) => {
+    const isOpen = openSections[`${activeProduct}-${activeDay}-${si}`];
+    const avatarDotClass = sec.avatarType || 'real';
+
+    let bodyContent = '<div class="section-grid"><div>';
+
+    // Script
+    bodyContent += `<div class="section-label">Script</div>
+      <div class="script-block"><p>${sec.script.replace(/\n/g,'<br>')}</p></div>`;
+
+    // Key points
+    if (sec.keyPoints) {
+      bodyContent += `<div class="section-label" style="margin-top:16px">Key Points</div>
+        <div class="meta-mini">${sec.keyPoints.map(kp => `<div class="meta-mini-item"><span class="icon">&#9679;</span><div><p>${kp}</p></div></div>`).join('')}</div>`;
+    }
+    bodyContent += '</div><div>';
+
+    // TikTok Format (for Gen Z hooks)
+    if (sec.tiktokFormat) {
+      bodyContent += `<div style="background:linear-gradient(135deg,#7c3aed10,#7c3aed05);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:16px;margin-bottom:12px">
+        <h5 style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#7c3aed;margin-bottom:8px">TikTok Trend Format</h5>
+        <p style="font-size:0.78rem;color:var(--text-primary);line-height:1.6;margin:0">${sec.tiktokFormat}</p>
+      </div>`;
+    }
+
+    // Set Design (for AIOS/real shoots)
+    if (sec.setDesign) {
+      bodyContent += `<div class="set-design"><h5>Set Design</h5><ul>`;
+      if (sec.setDesign.location) bodyContent += `<li><strong>Location:</strong> ${sec.setDesign.location}</li>`;
+      if (sec.setDesign.lighting) bodyContent += `<li><strong>Lighting:</strong> ${sec.setDesign.lighting}</li>`;
+      if (sec.setDesign.props) bodyContent += `<li><strong>Props:</strong> ${sec.setDesign.props}</li>`;
+      if (sec.setDesign.wardrobe) bodyContent += `<li><strong>Wardrobe:</strong> ${sec.setDesign.wardrobe}</li>`;
+      if (sec.setDesign.camera) bodyContent += `<li><strong>Camera:</strong> ${sec.setDesign.camera}</li>`;
+      if (sec.setDesign.framing) bodyContent += `<li><strong>Framing:</strong> ${sec.setDesign.framing}</li>`;
+      bodyContent += `</ul></div>`;
+    }
+
+    // Editing & Transitions (for AIOS/real shoots)
+    if (sec.editing) {
+      bodyContent += `<div class="editing-block"><h5>Editing & Transitions</h5><ul>`;
+      if (sec.editing.cuts) bodyContent += `<li><strong>Cuts:</strong> ${sec.editing.cuts}</li>`;
+      if (sec.editing.transitions) bodyContent += `<li><strong>Transitions:</strong> ${sec.editing.transitions}</li>`;
+      if (sec.editing.text) bodyContent += `<li><strong>On-Screen Text:</strong> ${sec.editing.text}</li>`;
+      if (sec.editing.sound) bodyContent += `<li><strong>Sound Design:</strong> ${sec.editing.sound}</li>`;
+      if (sec.editing.pacing) bodyContent += `<li><strong>Pacing:</strong> ${sec.editing.pacing}</li>`;
+      bodyContent += `</ul></div>`;
+    }
+
+    // Meta info (music, hook, duration)
+    bodyContent += `<div class="meta-mini" style="margin-top:12px">`;
+    if (sec.hookText) bodyContent += `<div class="meta-mini-item"><span class="icon">&#128172;</span><div><strong>Hook Text</strong><p>"${sec.hookText}"</p></div></div>`;
+    if (sec.music) bodyContent += `<div class="meta-mini-item"><span class="icon">&#127925;</span><div><strong>Music</strong><p>${sec.music}</p></div></div>`;
+    bodyContent += `<div class="meta-mini-item"><span class="icon">&#9202;</span><div><strong>Duration</strong><p>${sec.duration}</p></div></div>`;
+    bodyContent += `</div>`;
+
+    bodyContent += '</div></div>';
+
+    // Nano Banana / I2V prompts (for AI Video product only)
+    if (sec.nanoPrompts || sec.i2vClips) {
+      let promptCards = '';
+      if (sec.nanoPrompts) {
+        promptCards += `<div class="model-info"><span class="model-info-icon">&#127912;</span><div><strong>Nano Banana — Image Generation</strong><p>Click to copy</p></div></div>`;
+        sec.nanoPrompts.forEach((np, ni) => {
+          promptCards += `<div class="transition-card" onclick="copyPrompt(this, ${activeDay}, ${si}, 'nano', ${ni})">
+            <div class="transition-card-header"><div class="transition-panels"><span class="panel-num">STEP ${np.step}</span><span class="transition-label">${np.label}</span></div><span class="transition-copy-hint">Click to copy</span></div>
+            <div class="transition-card-body"><p>${np.prompt.substring(0, 180)}...</p></div></div>`;
+        });
+      }
+      if (sec.i2vClips) {
+        const totalDur = sec.i2vClips.reduce((s,cl) => s + cl.duration, 0);
+        promptCards += `<div class="model-info" style="margin-top:12px"><span class="model-info-icon">&#127916;</span><div><strong>Veo 3.1 — Image to Video</strong><p>${sec.i2vClips.length} clips = ~${totalDur}s</p></div></div>`;
+        sec.i2vClips.forEach((cl, ci) => {
+          promptCards += `<div class="transition-card" onclick="copyPrompt(this, ${activeDay}, ${si}, 'i2v', ${ci})">
+            <div class="transition-card-header"><div class="transition-panels"><span class="panel-num">CLIP ${ci+1}</span><span class="transition-label">${cl.label}</span><span class="panel-arrow">|</span><span class="panel-num">Panels ${cl.panels}</span></div><span class="transition-copy-hint">Click to copy</span></div>
+            <div class="transition-card-body"><p>${cl.motion.substring(0, 180)}...</p>
+              <div class="f2v-specs"><div class="f2v-spec"><span>Upload </span>Panel ${cl.inputPanel}</div><div class="f2v-spec"><span>Duration </span>${cl.duration}s</div><div class="f2v-spec"><span>Lip-sync </span>${cl.lipSync || 'No'}</div></div>
+            </div></div>`;
+        });
+      }
+      bodyContent += `<div class="section-prompts">${promptCards}</div>`;
+    }
+
+    sectionsHTML += `
+      <div class="video-section">
+        <div class="section-header ${isOpen?'open':''}" onclick="toggleSection(${activeDay},${si})">
+          <span class="section-badge ${sec.type}">${sec.type.toUpperCase()}</span>
+          <div class="section-info"><h4>${sec.title}</h4><p>${sec.description}</p></div>
+          <div class="section-avatar"><span class="avatar-dot ${avatarDotClass}"></span>${sec.avatar || ''}</div>
+          <div class="section-time">${sec.duration}</div>
+          <span class="section-chevron">&#9660;</span>
+        </div>
+        <div class="section-body ${isOpen?'open':''}">${bodyContent}</div>
+      </div>`;
+  });
+
+  container.innerHTML = `
+    <div class="day-card">
+      <div class="card-header">
+        <div class="card-icon">${icons[c.contentType]||icons.educate}</div>
+        <div class="card-header-text"><h2>${c.day} — ${c.title}</h2><p>Full video plan &middot; ${c.totalDuration}</p></div>
+        <div class="card-header-right">
+          <span class="content-type-chip ${c.contentType}">${c.contentTypeLabel}</span>
+          <span class="status-badge ${st}">${sl}</span>
+        </div>
+      </div>
+      <div class="video-timeline">
+        <div class="timeline-header"><h3>Video Sections</h3><span class="timeline-total">${c.sections.length} sections &middot; ${c.totalDuration}</span></div>
+        ${sectionsHTML}
+      </div>
+    </div>`;
+}
+
+function copyPrompt(el, dayIdx, secIdx, type, promptIdx) {
+  const plan = PRODUCTS[activeProduct].plan;
+  const sec = plan[dayIdx].sections[secIdx];
+  let text = '';
+  if (type === 'nano') text = sec.nanoPrompts[promptIdx].prompt;
+  else if (type === 'i2v') text = sec.i2vClips[promptIdx].motion;
+  navigator.clipboard.writeText(text).then(() => {
+    el.classList.add('copied');
+    const hint = el.querySelector('.transition-copy-hint');
+    hint.textContent = 'Copied!';
+    setTimeout(() => { el.classList.remove('copied'); hint.textContent = 'Click to copy'; }, 2000);
+  });
+}
+
+activeDay = getTodayIndex();
+render();
+</script>
+</body>
+</html>

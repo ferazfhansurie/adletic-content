@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hook Content Dashboard — Adletic Agency</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-dark: #08131f;
+    --bg-dark-2: #0d1f30;
+    --bg-grey: #F7F8FA;
+    --text-primary: #374151;
+    --text-muted: #6B7280;
+    --heading-dark: #0d1117;
+    --accent: #f26522;
+    --accent-hover: #d9541a;
+    --accent-light: rgba(242, 101, 34, 0.10);
+    --white: #FFFFFF;
+    --border-light: #E5E7EB;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  /* Navigation */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; font-weight: 700; color: var(--heading-dark); letter-spacing: -0.01em; }
+  .nav-logo { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
+
+  /* Hero */
+  .hero-header { background: var(--bg-dark); padding: 48px 0 56px; position: relative; overflow: hidden; }
+  .hero-content { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; text-align: center; }
+  .hero-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; color: #fff; line-height: 1.12; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .hero-title-accent { color: var(--accent); }
+  .hero-subtitle { font-size: clamp(0.95rem, 1.8vw, 1.1rem); color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 560px; margin: 0 auto; font-weight: 400; }
+
+  /* Main */
+  .main-content { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* Hook Cards */
+  .hooks-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  .hook-card { background: var(--white); border: 1px solid var(--border-light); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); }
+
+  .hook-header { display: flex; align-items: flex-start; gap: 14px; padding: 28px 28px 24px; border-bottom: 1px solid var(--border-light); background: linear-gradient(135deg, #fff7f3 0%, #fff 100%); }
+  .hook-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(242,101,34,0.12); color: var(--accent); font-size: 1.2rem; }
+  .hook-title { font-size: 1.25rem; font-weight: 700; color: var(--heading-dark); margin-bottom: 4px; }
+  .hook-description { font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; }
+
+  .hook-content { padding: 24px 28px; }
+  .hook-setup { margin-bottom: 20px; }
+  .hook-setup h4 { color: var(--heading-dark); font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .hook-setup p { color: var(--text-muted); font-size: 0.875rem; line-height: 1.5; }
+
+  .hook-script { background: var(--bg-grey); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .hook-script h4 { color: var(--heading-dark); font-size: 0.875rem; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .script-text { font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace; font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; white-space: pre-line; }
+  .reveal-text { color: var(--accent); font-weight: 600; }
+
+  .hook-prompt { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; }
+  .hook-prompt h4 { color: var(--heading-dark); font-size: 0.875rem; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .prompt-text { font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; white-space: pre-line; }
+
+  @media (max-width: 768px) {
+    .nav-inner { padding: 0 16px; }
+    .hero-content { padding: 0 16px; }
+    .main-content { padding: 24px 16px 60px; }
+    .hook-header { padding: 20px 20px 16px; }
+    .hook-content { padding: 16px 20px; }
+  }
+</style>
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <div class="nav-logo">A</div>
+        Hook Content Dashboard
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero-header">
+    <div class="hero-content">
+      <h1 class="hero-title">Video <span class="hero-title-accent">Hooks</span> Only</h1>
+      <p class="hero-subtitle">Hyper-realistic opening moments that grab attention before the AI reveal</p>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="hooks-grid">
+
+      <!-- Hook 1: Skincare Girl -->
+      <div class="hook-card">
+        <div class="hook-header">
+          <div class="hook-icon">💄</div>
+          <div>
+            <h3 class="hook-title">Skincare Girl → AI Reveal</h3>
+            <p class="hook-description">Classic beauty influencer setup that gets interrupted mid-sentence</p>
+          </div>
+        </div>
+        <div class="hook-content">
+          <div class="hook-setup">
+            <h4>Setup</h4>
+            <p>Bathroom mirror, typical influencer morning routine, holding skincare product</p>
+          </div>
+          <div class="hook-script">
+            <h4>Script (KL Style)</h4>
+            <div class="script-text">"Hey guys, so I'm about to start my morning skincare routine with this new CeraVe cleanser and I've been using it for like two weeks and honestly the results have been amazing lah, like my skin is so much clearer and—<span class="reveal-text">jap, before that, I am entirely AI generated tau, hehe.</span>"</div>
+          </div>
+          <div class="hook-prompt">
+            <h4>Visual Prompt</h4>
+            <div class="prompt-text">PANEL 1: Classic influencer selfie in bathroom. Girl holding phone at arm's length, looking directly at camera with excited expression. One hand holding CeraVe cleanser bottle, showing it to camera. Ring light visible in irises. Bathroom counter with skincare products blurred behind. She looks mid-sentence explaining the product.
+
+PANEL 2: Exact same setup but expression completely changed. Mid-word facial expression frozen, eyes slightly widened in realization. Hand still holding cleanser but posture more rigid. The moment of reveal - the energy shifts from bubbly influencer to something uncanny.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hook 2: GRWM Guy -->
+      <div class="hook-card">
+        <div class="hook-header">
+          <div class="hook-icon">👔</div>
+          <div>
+            <h3 class="hook-title">GRWM Date Prep → AI Reveal</h3>
+            <p class="hook-description">Guy getting ready for first date, classic GRWM energy</p>
+          </div>
+        </div>
+        <div class="hook-content">
+          <div class="hook-setup">
+            <h4>Setup</h4>
+            <p>Bedroom mirror, getting dressed up, cologne and styling</p>
+          </div>
+          <div class="hook-script">
+            <h4>Script (KL Style)</h4>
+            <div class="script-text">"Eh guys, so tonight first date with this girl from Bumble lah, very nervous siot. Already shower, now just need to put cologne and fix my hair a bit. She seems really nice, we've been texting for two weeks and—<span class="reveal-text">wait wait, sebelum tu, I'm actually AI generated. Surprise!</span>"</div>
+          </div>
+          <div class="hook-prompt">
+            <h4>Visual Prompt</h4>
+            <div class="prompt-text">PANEL 1: POV from phone propped on dresser. Guy standing in front of mirror adjusting hair. Room visible around him — messy bed, sneakers, fairy lights. Warm bedroom light. Barefoot, white tee and dark jeans, belt undone. Natural GRWM energy.
+
+PANEL 2: Close-up selfie angle. Guy spraying cologne on inner wrist, slight mist visible. Eyes looking down at wrist with focused expression. The routine moment before the reveal shift.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hook 3: Food Review -->
+      <div class="hook-card">
+        <div class="hook-header">
+          <div class="hook-icon">🍛</div>
+          <div>
+            <h3 class="hook-title">Mamak Food Review → AI Reveal</h3>
+            <p class="hook-description">Typical Malaysian food content at mamak stall</p>
+          </div>
+        </div>
+        <div class="hook-content">
+          <div class="hook-setup">
+            <h4>Setup</h4>
+            <p>Mamak stall table, roti canai and teh tarik, fluorescent lighting</p>
+          </div>
+          <div class="hook-script">
+            <h4>Script (KL Style)</h4>
+            <div class="script-text">"Okay guys, so I'm at my favorite mamak in Bangsar right now and I just ordered their signature roti canai with dal curry. Look at this golden brown color, so crispy! The teh tarik also looks perfect lah, see the foam? I've been coming here since I was small and—<span class="reveal-text">eh jap, actually I'm AI generated je. Got you!</span>"</div>
+          </div>
+          <div class="hook-prompt">
+            <h4>Visual Prompt</h4>
+            <div class="prompt-text">PANEL 1: iPhone front-camera selfie at mamak table. Girl in hijab, excited expression mid-word, one hand gesturing toward roti canai on banana leaf. Fluorescent mamak lights creating harsh flat lighting. Red plastic chair visible.
+
+PANEL 2: Overhead flat-lay of the food. Roti canai on banana leaf, golden brown layers, steel bowl of dal curry, glass of teh tarik with foam. Her hand entering frame holding phone.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hook 4: Student Life -->
+      <div class="hook-card">
+        <div class="hook-header">
+          <div class="hook-icon">🎓</div>
+          <div>
+            <h3 class="hook-title">Student Morning → AI Reveal</h3>
+            <p class="hook-description">Relatable university student morning routine</p>
+          </div>
+        </div>
+        <div class="hook-content">
+          <div class="hook-setup">
+            <h4>Setup</h4>
+            <p>Small room, early morning alarm, LRT commute prep</p>
+          </div>
+          <div class="hook-script">
+            <h4>Script (KL Style)</h4>
+            <div class="script-text">"5.45am alarm again lah guys, I swear this semester is killing me. Need to catch the 6.30 LRT to get to campus by 8am for my first lecture. Coffee also haven't make yet, hair looking like bird nest. University life really like this one, every day rush rush—<span class="reveal-text">actually, before I continue, I'm AI generated tau. Mind blown or not?</span>"</div>
+          </div>
+          <div class="hook-prompt">
+            <h4>Visual Prompt</h4>
+            <div class="prompt-text">PANEL 1: Dark morning room. Guy lying in bed, phone alarm screen glowing "5:45 AM." Face half-lit by cold blue-white phone screen, other half in shadow. Messy bed, small room barely visible. Eyes barely open, squinting.
+
+PANEL 2: LRT Kelana Jaya line platform. Guy standing with Herschel backpack, earbuds in, scrolling phone. Modern station curved roof, digital display showing "2 MIN." Other commuters blurred in background.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hook 5: Shopping -->
+      <div class="hook-card">
+        <div class="hook-header">
+          <div class="hook-icon">🛍️</div>
+          <div>
+            <h3 class="hook-title">Bundle Shopping → AI Reveal</h3>
+            <p class="hook-description">Malaysian bundle/thrift shopping experience</p>
+          </div>
+        </div>
+        <div class="hook-content">
+          <div class="hook-setup">
+            <h4>Setup</h4>
+            <p>Bundle shop with packed clothing racks, fluorescent lighting</p>
+          </div>
+          <div class="hook-script">
+            <h4>Script (KL Style)</h4>
+            <div class="script-text">"Guys, I found the best bundle shop in SS15 lah! Everything RM10 je, look at this vintage band tee I just found. Still got tags some more! My wardrobe all from bundle shops, so much cheaper than buying new clothes. Sustainable also right? Let me show you my haul for today—<span class="reveal-text">eh wait, actually I'm AI generated. Plot twist!</span>"</div>
+          </div>
+          <div class="hook-prompt">
+            <h4>Visual Prompt</h4>
+            <div class="prompt-text">PANEL 1: Wide shot inside bundle shop. Girl digging through packed clothing rack with both hands. Fluorescent tubes above, "RM10 SEMUA" sign hanging from rack. Other shoppers in background. Determined bargain hunter expression.
+
+PANEL 2: Close-up of her hand pulling out a cropped vintage band tee. Masking-tape price tag — "RM8" in red marker. Her face blurred in background with wide-eyed "OMG FIND" expression.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>
